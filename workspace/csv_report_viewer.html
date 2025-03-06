@@ -1,0 +1,192 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CSV Report Viewer</title>
+        <style>
+            body {
+                background-color: #121212;
+                color: #E0E0E0;
+                font-family: Arial, sans-serif;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                cursor: pointer;
+                background-color: #333333;
+            }
+            tr:nth-child(even) {
+                background-color: #1E1E1E;
+            }
+            tr:nth-child(odd) {
+                background-color: #282828;
+            }
+            #searchInput {
+                margin-bottom: 10px;
+                padding: 8px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+    <body>
+    
+    <h2>CSV Report Viewer</h2>
+
+    <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search...">
+
+    <label for="csvSelect">Select CSV File:</label>
+    <select id="csvSelect" onchange="loadCSV(this.value)">
+    <option value="stocks.csv">stocks.csv</option><option value="stocks_v2.csv">stocks_v2.csv</option><option value="stock_report_2025-03-05.csv">stock_report_2025-03-05.csv</option>
+    </select>
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th onclick='sortTable(0)'>pple Inc. (AAPL)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Microsoft Corporation (MSFT)</td></tr><tr><td>NVIDIA Corporation (NVDA)</td></tr><tr><td>Amazon.com, Inc. (AMZN)</td></tr><tr><td>Alphabet Inc. (GOOGL)</td></tr><tr><td>Meta Platforms, Inc. (META)</td></tr><tr><td>Berkshire Hathaway Inc. (BRK.A)</td></tr><tr><td>Tesla, Inc. (TSLA)</td></tr><tr><td>Broadcom Inc. (AVGO)</td></tr><tr><td>Taiwan Semiconductor Manufacturing Company (TSM)</td></tr><tr><td>Visa Inc. (V)</td></tr><tr><td>Johnson & Johnson (JNJ)</td></tr><tr><td>Walmart Inc. (WMT)</td></tr><tr><td>JPMorgan Chase & Co. (JPM)</td></tr><tr><td>Procter & Gamble Co. (PG)</td></tr><tr><td>Mastercard Incorporated (MA)</td></tr><tr><td>UnitedHealth Group Incorporated (UNH)</td></tr><tr><td>Samsung Electronics Co., Ltd. (SSNLF)</td></tr><tr><td>Nestlé S.A. (NSRGY)</td></tr><tr><td>Roche Holding AG (RHHBY)</td></tr><tr><td>ASML Holding N.V. (ASML)</td></tr><tr><td>Chevron Corporation (CVX)</td></tr><tr><td>Eli Lilly and Company (LLY)</td></tr><tr><td>Home Depot, Inc. (HD)</td></tr><tr><td>Pfizer Inc. (PFE)</td></tr><tr><td>Bank of America Corporation (BAC)</td></tr><tr><td>AbbVie Inc. (ABBV)</td></tr><tr><td>Coca-Cola Company (KO)</td></tr><tr><td>Novo Nordisk A/S (NVO)</td></tr><tr><td>Toyota Motor Corporation (TM)</td></tr><tr><td>Exxon Mobil Corporation (XOM)</td></tr><tr><td>Oracle Corporation (ORCL)</td></tr><tr><td>L'Oréal S.A. (LRLCY)</td></tr><tr><td>Merck & Co., Inc. (MRK)</td></tr><tr><td>PepsiCo, Inc. (PEP)</td></tr><tr><td>Cisco Systems, Inc. (CSCO)</td></tr><tr><td>Alibaba Group Holding Limited (BABA)</td></tr><tr><td>Intel Corporation (INTC)</td></tr><tr><td>Verizon Communications Inc. (VZ)</td></tr><tr><td>Walt Disney Company (DIS)</td></tr><tr><td>Comcast Corporation (CMCSA)</td></tr><tr><td>Netflix, Inc. (NFLX)</td></tr><tr><td>AT&T Inc. (T)</td></tr><tr><td>Medtronic plc (MDT)</td></tr><tr><td>Abbott Laboratories (ABT)</td></tr><tr><td>Thermo Fisher Scientific Inc. (TMO)</td></tr><tr><td>Salesforce.com Inc. (CRM)</td></tr><tr><td>Adobe Inc. (ADBE)</td></tr><tr><td>Amgen Inc. (AMGN)</td></tr><tr><td>Bristol-Myers Squibb Company (BMY)</td></tr><tr><td>Qualcomm Incorporated (QCOM)</td></tr><tr><td>PayPal Holdings, Inc. (PYPL)</td></tr><tr><td>Accenture plc (ACN)</td></tr><tr><td>Costco Wholesale Corporation (COST)</td></tr><tr><td>AstraZeneca PLC (AZN)</td></tr><tr><td>SAP SE (SAP)</td></tr><tr><td>BHP Group (BHP)</td></tr><tr><td>Shell plc (SHEL)</td></tr><tr><td>TotalEnergies SE (TTE)</td></tr><tr><td>HSBC Holdings plc (HSBC)</td></tr><tr><td>Novartis AG (NVS)</td></tr><tr><td>Sanofi (SNY)</td></tr><tr><td>Unilever PLC (UL)</td></tr><tr><td>Rio Tinto Group (RIO)</td></tr><tr><td>GlaxoSmithKline plc (GSK)</td></tr><tr><td>Prologis, Inc. (PLD)</td></tr><tr><td>Union Pacific Corporation (UNP)</td></tr><tr><td>NextEra Energy, Inc. (NEE)</td></tr><tr><td>Royal Bank of Canada (RY)</td></tr><tr><td>Commonwealth Bank of Australia (CBA.AX)</td></tr><tr><td>Tencent Holdings Limited (TCEHY)</td></tr><tr><td>JD.com, Inc. (JD)</td></tr><tr><td>Pinduoduo Inc. (PDD)</td></tr><tr><td>Meituan (MPNGF)</td></tr><tr><td>NIO Inc. (NIO)</td></tr><tr><td>BYD Company Limited (BYDDY)</td></tr><tr><td>Lucid Group, Inc. (LCID)</td></tr><tr><td>Rivian Automotive, Inc. (RIVN)</td></tr><tr><td>Stellantis N.V. (STLA)</td></tr><tr><td>Ferrari N.V. (RACE)</td></tr><tr><td>Zoom Video Communications, Inc. (ZM)</td></tr><tr><td>DocuSign, Inc. (DOCU)</td></tr><tr><td>ServiceNow, Inc. (NOW)</td></tr><tr><td>Twilio Inc. (TWLO)</td></tr><tr><td>Snowflake Inc. (SNOW)</td></tr><tr><td>CrowdStrike Holdings, Inc. (CRWD)</td></tr><tr><td>Zscaler, Inc. (ZS)</td></tr><tr><td>Okta, Inc. (OKTA)</td></tr><tr><td>Palo Alto Networks, Inc. (PANW)</td></tr><tr><td>Fortinet, Inc. (FTNT)</td></tr><tr><td>Atlassian Corporation Plc (TEAM)</td></tr><tr><td>Autodesk, Inc. (ADSK)</td></tr><tr><td>Elastic N.V. (ESTC)</td></tr><tr><td>MongoDB, Inc. (MDB)</td></tr><tr><td>Datadog, Inc. (DDOG)</td></tr><tr><td>Cloudflare, Inc. (NET)</td></tr><tr><td>Fastly, Inc. (FSLY)</td></tr><tr><td>Pinterest, Inc. (PINS)</td></tr><tr><td>Snap Inc. (SNAP)</td></tr><tr><td>Bumble Inc. (BMBL)</td></tr><tr><td>Match Group, Inc. (MTCH)</td></tr><tr><td>Spotify Technology S.A. (SPOT)</td></tr><tr><td>Roku, Inc. (ROKU)</td></tr><tr><td>Paramount Global (PARA)</td></tr><tr><td>Warner Bros. Discovery, Inc. (WBD)</td></tr><tr><td>Electronic Arts Inc. (EA)</td></tr><tr><td>Take-Two Interactive Software, Inc. (TTWO)</td></tr><tr><td>Roblox Corporation (RBLX)</td></tr><tr><td>Unity Software Inc. (U)</td></tr><tr><td>Coinbase Global, Inc. (COIN)</td></tr><tr><td>SoFi Technologies, Inc. (SOFI)</td></tr><tr><td>Robinhood Markets, Inc. (HOOD)</td></tr><tr><td>Adyen N.V. (ADYEY)</td></tr><tr><td>MercadoLibre, Inc. (MELI)</td></tr><tr><td>Airbnb, Inc. (ABNB)</td></tr><tr><td>Booking Holdings Inc. (BKNG)</td></tr><tr><td>Expedia Group, Inc. (EXPE)</td></tr><tr><td>Uber Technologies, Inc. (UBER)</td></tr><tr><td>Lyft, Inc. (LYFT)</td></tr><tr><td>DoorDash, Inc. (DASH)</td></tr><tr><td>Nintendo Co., Ltd. (NTDOY)</td></tr><tr><td>Square Enix Holdings Co., Ltd. (SQNXF)</td></tr><tr><td>Bandai Namco Holdings Inc. (NCBDF)</td></tr><tr><td>Capcom Co., Ltd. (CCOEY)</td></tr><tr><td>Palantir Technologies Inc. (PLTR)</td></tr><tr><td>KLA Corporation (KLAC)</td></tr><tr><td>Lam Research Corporation (LRCX)</td></tr><tr><td>Applied Materials, Inc. (AMAT)</td></tr><tr><td>Western Digital Corporation (WDC)</td></tr><tr><td>Seagate Technology Holdings PLC (STX)</td></tr><tr><td>Dell Technologies Inc. (DELL)</td></tr><tr><td>Hewlett Packard Enterprise Company (HPE)</td></tr><tr><td>HP Inc. (HPQ)</td></tr><tr><td>Cisco Systems, Inc. (CSCO)</td></tr><tr><td>Arista Networks, Inc. (ANET)</td></tr><tr><td>Juniper Networks, Inc. (JNPR)</td></tr><tr><td>Nokia Corporation (NOK)</td></tr><tr><td>Ericsson (ERIC)</td></tr><tr><td>Texas Instruments Incorporated (TXN)</td></tr><tr><td>Broadcom Inc. (AVGO)</td></tr><tr><td>ASML Holding N.V. (ASML)</td></tr><tr><td>Tokyo Electron Limited (TOELY)</td></tr><tr><td>Panasonic Holdings Corporation (PCRFY)</td></tr><tr><td>Hitachi, Ltd. (HTHIY)</td></tr><tr><td>Fujitsu Limited (FJTSY)</td></tr><tr><td>Ricoh Company, Ltd. (RICOY)</td></tr><tr><td>Seiko Epson Corporation (SEKEY)</td></tr><tr><td>Sharp Corporation (SHCAY)</td></tr><tr><td>Spotify Technology S.A. (SPOT)</td></tr><tr><td>Netflix, Inc. (NFLX)</td></tr><tr><td>Roku, Inc. (ROKU)</td></tr><tr><td>Walt Disney Company (DIS)</td></tr><tr><td>Warner Bros. Discovery, Inc. (WBD)</td></tr><tr><td>Paramount Global (PARA)</td></tr><tr><td>Comcast Corporation (CMCSA)</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+    function sortTable(columnIndex) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("dataTable");
+        switching = true;
+        dir = "asc"; 
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[columnIndex];
+                y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                if (dir == "asc") {
+                    if (isNumeric(x.innerHTML) && isNumeric(y.innerHTML)) {
+                        if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                } else if (dir == "desc") {
+                    if (isNumeric(x.innerHTML) && isNumeric(y.innerHTML)) {
+                        if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;      
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+    function isNumeric(value) {
+        return !isNaN(parseFloat(value)) && isFinite(value);
+    }
+
+    function loadCSV(fileName) {
+        fetch(fileName)
+            .then(function(response) { return response.text(); })
+            .then(function(data) {
+                var lines = data.split('\n');
+                var headers = lines[0].split(',');
+                var table = document.getElementById('dataTable');
+                var newThead = document.createElement('thead');
+                var newTbody = document.createElement('tbody');
+
+                var headerRow = document.createElement('tr');
+                for (var i = 0; i < headers.length; i++) {
+                    var cell = document.createElement('th');
+                    cell.innerHTML = headers[i];
+                    cell.setAttribute('onclick', 'sortTable(' + i + ')');
+                    headerRow.appendChild(cell);
+                }
+                newThead.appendChild(headerRow);
+                
+                for (var i = 1; i < lines.length; i++) {
+                    var regex = /("([^"]*)")|([^,]+)/g;
+                    var cells = [];
+                    var match;
+
+                    while ((match = regex.exec(lines[i])) !== null) {
+                        if (match[2] !== undefined) {
+                            cells.push(match[2]); // Quoted value
+                        } else if (match[3] !== undefined) {
+                            cells.push(match[3]); // Unquoted value
+                        }
+                    }
+
+                    var row = document.createElement('tr');
+                    for (var j = 0; j < cells.length; j++) {
+                        var cell = document.createElement('td');
+                        cell.innerHTML = cells[j];
+                        row.appendChild(cell);
+                    }
+                    newTbody.appendChild(row);
+                }
+                table.innerHTML = '';
+                table.appendChild(newThead);
+                table.appendChild(newTbody);
+            })
+            .catch(function(error) {
+                console.error('Error loading CSV:', error);
+            });
+    }
+
+    function searchTable() {
+        var input, filter, table, tr, td, cell, i, j, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("dataTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    cell = td[j].textContent || td[j].innerText;
+                    if (cell.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    </script>
+
+    </body>
+    </html>
+    

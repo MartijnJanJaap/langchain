@@ -1,0 +1,223 @@
+Ticker,Company,Industry,Country
+RELIANCE.NS,Reliance Industries Limited,Conglomerate,India
+TCS.NS,Tata Consultancy Services,Information Technology,India
+BHARTIARTL.NS,Bharti Airtel,Telecommunications,India
+HINDUNILVR.NS,Hindustan Unilever Limited,Consumer Goods,India
+INFY.NS,Infosys,Information Technology,India
+WIPRO.NS,Wipro,Information Technology,India
+HCLTECH.NS,HCL Technologies,Information Technology,India
+ASIANPAINT.NS,Asian Paints,Consumer Goods,India
+LT.NS,Larsen & Toubro,Engineering & Construction,India
+MARUTI.NS,Maruti Suzuki India Limited,Automotive,India
+ITC.NS,ITC Limited,Conglomerate,India
+HDFCLIFE.NS,HDFC Life Insurance,Insurance,India
+NTPC.NS,NTPC Limited,Energy,India
+POWERGRID.NS,Power Grid Corporation of India,Energy,India
+BAJAJ-AUTO.NS,Bajaj Auto,Automotive,India
+NESTLEIND.NS,Nestle India,Consumer Goods,India
+SUNPHARMA.NS,Sun Pharmaceutical Industries,Pharmaceuticals,India
+M&M.NS,Mahindra & Mahindra,Automotive,India
+ULTRACEMCO.NS,UltraTech Cement,Cement,India
+TITAN.NS,Titan Company,Consumer Goods,India
+ADANIGREEN.NS,Adani Green Energy,Energy,India
+ADANIPORTS.NS,Adani Ports and Special Economic Zone,Infrastructure,India
+JSWSTEEL.NS,JSW Steel,Metals & Mining,India
+TATASTEEL.NS,Tata Steel,Metals & Mining,India
+SBILIFE.NS,SBI Life Insurance,Insurance,India
+DIVISLAB.NS,Divi's Laboratories,Pharmaceuticals,India
+DRREDDY.NS,Dr. Reddy's Laboratories,Pharmaceuticals,India
+CIPLA.NS,Cipla,Pharmaceuticals,India
+BRITANNIA.NS,Britannia Industries,Consumer Goods,India
+COALINDIA.NS,Coal India,Metals & Mining,India
+HINDALCO.NS,Hindalco Industries,Metals & Mining,India
+GRASIM.NS,Grasim Industries,Conglomerate,India
+IOC.NS,Indian Oil Corporation,Energy,India
+BPCL.NS,Bharat Petroleum Corporation Limited,Energy,India
+HEROMOTOCO.NS,Hero MotoCorp,Automotive,India
+EICHERMOT.NS,Eicher Motors,Automotive,India
+SHREECEM.NS,Shree Cement,Cement,India
+TECHM.NS,Tech Mahindra,Information Technology,India
+UPL.NS,UPL Limited,Chemicals,India
+TATAMOTORS.NS,Tata Motors,Automotive,India
+BAJAJFINSV.NS,Bajaj Finserv,Financial Services,India
+ZEEL.NS,Zee Entertainment Enterprises,Media & Entertainment,India
+GODREJCP.NS,Godrej Consumer Products,Consumer Goods,India
+DLF.NS,DLF Limited,Real Estate,India
+PIDILITIND.NS,Pidilite Industries,Chemicals,India
+DMART.NS,Avenue Supermarts (DMart),Retail,India
+BEL.NS,Bharat Electronics Limited,Defense,India
+GAIL.NS,GAIL (India) Limited,Energy,India
+ONGC.NS,Oil and Natural Gas Corporation,Energy,India
+HINDZINC.NS,Hindustan Zinc,Metals & Mining,India
+TATAPOWER.NS,Tata Power Company,Energy,India
+ADANITRANS.NS,Adani Transmission,Energy,India
+ICICIPRULI.NS,ICICI Prudential Life Insurance,Insurance,India
+APOLLOHOSP.NS,Apollo Hospitals Enterprise,Healthcare,India
+MUTHOOTFIN.NS,Muthoot Finance,Financial Services,India
+LTIM.NS,Larsen & Toubro Infotech,Information Technology,India
+HDFCAMC.NS,HDFC Asset Management Company,Financial Services,India
+SBICARD.NS,SBI Cards and Payment Services,Financial Services,India
+BIOCON.NS,Biocon,Pharmaceuticals,India
+NAUKRI.NS,Info Edge (India) Limited,Internet Services,India
+INDIGO.NS,InterGlobe Aviation (IndiGo),Aviation,India
+BAJFINANCE.NS,Bajaj Finance,Financial Services,India
+HAVELLS.NS,Havells India,Consumer Electronics,India
+COLPAL.NS,Colgate-Palmolive (India),Consumer Goods,India
+DABUR.NS,Dabur India,Consumer Goods,India
+TATACHEM.NS,Tata Chemicals,Chemicals,India
+MPHASIS.NS,Mphasis,Information Technology,India
+AAPL,Apple Inc.,Technology,USA
+MSFT,Microsoft Corporation,Technology,USA
+NVDA,NVIDIA Corporation,Semiconductors,USA
+AMZN,"Amazon.com, Inc.",E-Commerce,USA
+GOOGL,Alphabet Inc.,Technology,USA
+META,"Meta Platforms, Inc.",Social Media,USA
+BRK.A,Berkshire Hathaway Inc.,Conglomerate,USA
+TSLA,"Tesla, Inc.",Automotive,USA
+AVGO,Broadcom Inc.,Semiconductors,USA
+TSM,Taiwan Semiconductor Manufacturing Company,Semiconductors,Taiwan
+V,Visa Inc.,Financial Services,USA
+JNJ,Johnson & Johnson,Healthcare,USA
+WMT,Walmart Inc.,Retail,USA
+JPM,JPMorgan Chase & Co.,Banking,USA
+PG,Procter & Gamble Co.,Consumer Goods,USA
+MA,Mastercard Incorporated,Financial Services,USA
+UNH,UnitedHealth Group Incorporated,Healthcare,USA
+SSNLF,"Samsung Electronics Co., Ltd.",Technology,South Korea
+NSRGY,Nestlé S.A.,Consumer Goods,Switzerland
+RHHBY,Roche Holding AG,Pharmaceuticals,Switzerland
+ASML,ASML Holding N.V.,Semiconductors,Netherlands
+CVX,Chevron Corporation,Energy,USA
+LLY,Eli Lilly and Company,Pharmaceuticals,USA
+HD,"Home Depot, Inc.",Retail,USA
+PFE,Pfizer Inc.,Pharmaceuticals,USA
+BAC,Bank of America Corporation,Banking,USA
+ABBV,AbbVie Inc.,Pharmaceuticals,USA
+KO,Coca-Cola Company,Beverages,USA
+NVO,Novo Nordisk A/S,Pharmaceuticals,Denmark
+TM,Toyota Motor Corporation,Automotive,Japan
+XOM,Exxon Mobil Corporation,Energy,USA
+ORCL,Oracle Corporation,Software,USA
+LRLCY,L'Oréal S.A.,Consumer Goods,France
+MRK,"Merck & Co., Inc.",Pharmaceuticals,USA
+PEP,"PepsiCo, Inc.",Beverages,USA
+CSCO,"Cisco Systems, Inc.",Networking,USA
+BABA,Alibaba Group Holding Limited,E-Commerce,China
+INTC,Intel Corporation,Semiconductors,USA
+VZ,Verizon Communications Inc.,Telecommunications,USA
+DIS,Walt Disney Company,Entertainment,USA
+CMCSA,Comcast Corporation,Media,USA
+NFLX,"Netflix, Inc.",Streaming Services,USA
+T,AT&T Inc.,Telecommunications,USA
+MDT,Medtronic plc,Healthcare,Ireland
+ABT,Abbott Laboratories,Healthcare,USA
+TMO,Thermo Fisher Scientific Inc.,Biotechnology,USA
+CRM,Salesforce.com Inc.,Software,USA
+ADBE,Adobe Inc.,Software,USA
+AMGN,Amgen Inc.,Biotechnology,USA
+BMY,Bristol-Myers Squibb Company,Pharmaceuticals,USA
+QCOM,Qualcomm Incorporated,Semiconductors,USA
+PYPL,"PayPal Holdings, Inc.",Financial Services,USA
+ACN,Accenture plc,Consulting,Ireland
+COST,Costco Wholesale Corporation,Retail,USA
+AZN,AstraZeneca PLC,Pharmaceuticals,UK
+SAP,SAP SE,Software,Germany
+BHP,BHP Group,Metals & Mining,Australia
+SHEL,Shell plc,Energy,UK
+TTE,TotalEnergies SE,Energy,France
+HSBC,HSBC Holdings plc,Banking,UK
+NVS,Novartis AG,Pharmaceuticals,Switzerland
+SNY,Sanofi,Pharmaceuticals,France
+UL,Unilever PLC,Consumer Goods,UK
+RIO,Rio Tinto Group,Metals & Mining,UK
+GSK,GlaxoSmithKline plc,Pharmaceuticals,UK
+PLD,"Prologis, Inc.",Real Estate,USA
+UNP,Union Pacific Corporation,Transportation,USA
+NEE,"NextEra Energy, Inc.",Energy,USA
+TCEHY,Tencent Holdings Limited,Technology,China
+JD,"JD.com, Inc.",E-Commerce,China
+PDD,Pinduoduo Inc.,E-Commerce,China
+NIO,NIO Inc.,Automotive,China
+BYDDY,BYD Company Limited,Automotive,China
+LCID,"Lucid Group, Inc.",Automotive,USA
+RIVN,"Rivian Automotive, Inc.",Automotive,USA
+STLA,Stellantis N.V.,Automotive,Netherlands
+RACE,Ferrari N.V.,Automotive,Italy
+ZM,"Zoom Video Communications, Inc.",Software,USA
+DOCU,"DocuSign, Inc.",Software,USA
+NOW,"ServiceNow, Inc.",Software,USA
+TWLO,Twilio Inc.,Software,USA
+SNOW,Snowflake Inc.,Software,USA
+CRWD,"CrowdStrike Holdings, Inc.",Cybersecurity,USA
+ZS,"Zscaler, Inc.",Cybersecurity,USA
+OKTA,"Okta, Inc.",Cybersecurity,USA
+PANW,"Palo Alto Networks, Inc.",Cybersecurity,USA
+FTNT,"Fortinet, Inc.",Cybersecurity,USA
+TEAM,Atlassian Corporation Plc,Software,Australia
+ADSK,"Autodesk, Inc.",Software,USA
+ESTC,Elastic N.V.,Software,Netherlands
+MDB,"MongoDB, Inc.",Software,USA
+DDOG,"Datadog, Inc.",Software,USA
+NET,"Cloudflare, Inc.",Networking,USA
+FSLY,"Fastly, Inc.",Networking,USA
+PINS,"Pinterest, Inc.",Social Media,USA
+SNAP,Snap Inc.,Social Media,USA
+BMBL,Bumble Inc.,Social Media,USA
+MTCH,"Match Group, Inc.",Social Media,USA
+SPOT,Spotify Technology S.A.,Streaming Services,Sweden
+ROKU,"Roku, Inc.",Streaming Services,USA
+PARA,Paramount Global,Media,USA
+WBD,"Warner Bros. Discovery, Inc.",Media,USA
+EA,Electronic Arts Inc.,Gaming,USA
+TTWO,"Take-Two Interactive Software, Inc.",Gaming,USA
+RBLX,Roblox Corporation,Gaming,USA
+U,Unity Software Inc.,Gaming,USA
+COIN,"Coinbase Global, Inc.",Cryptocurrency,USA
+SOFI,"SoFi Technologies, Inc.",Financial Services,USA
+HOOD,"Robinhood Markets, Inc.",Financial Services,USA
+ADYEY,Adyen N.V.,Financial Services,Netherlands
+MELI,"MercadoLibre, Inc.",E-Commerce,Argentina
+ABNB,"Airbnb, Inc.",Hospitality,USA
+BKNG,Booking Holdings Inc.,Hospitality,USA
+EXPE,"Expedia Group, Inc.",Hospitality,USA
+UBER,"Uber Technologies, Inc.",Transportation,USA
+LYFT,"Lyft, Inc.",Transportation,USA
+DASH,"DoorDash, Inc.",Food Delivery,USA
+NTDOY,"Nintendo Co., Ltd.",Gaming,Japan
+SQNXF,"Square Enix Holdings Co., Ltd.",Gaming,Japan
+NCBDF,Bandai Namco Holdings Inc.,Gaming,Japan
+CCOEY,"Capcom Co., Ltd.",Gaming,Japan
+PLTR,Palantir Technologies Inc.,Data Analytics,USA
+KLAC,KLA Corporation,Semiconductors,USA
+LRCX,Lam Research Corporation,Semiconductors,USA
+AMAT,"Applied Materials, Inc.",Semiconductors,USA
+WDC,Western Digital Corporation,Storage,USA
+STX,Seagate Technology Holdings PLC,Storage,USA
+DELL,Dell Technologies Inc.,Technology,USA
+HPE,Hewlett Packard Enterprise Company,Technology,USA
+HPQ,HP Inc.,Technology,USA
+ANET,"Arista Networks, Inc.",Networking,USA
+JNPR,"Juniper Networks, Inc.",Networking,USA
+NOK,Nokia Corporation,Networking,Finland
+ERIC,Ericsson,Networking,Sweden
+TXN,Texas Instruments Incorporated,Semiconductors,USA
+TOELY,Tokyo Electron Limited,Semiconductors,Japan
+PCRFY,Panasonic Holdings Corporation,Consumer Electronics,Japan
+HTHIY,"Hitachi, Ltd.",Technology,Japan
+FJTSY,Fujitsu Limited,Technology,Japan
+RICOY,"Ricoh Company, Ltd.",Technology,Japan
+SEKEY,Seiko Epson Corporation,Technology,Japan
+SHCAY,Sharp Corporation,Technology,Japan
+DXCM,"DexCom, Inc.",Medical Devices,USA
+ISRG,"Intuitive Surgical, Inc.",Medical Devices,USA
+VRTX,Vertex Pharmaceuticals Incorporated,Biotechnology,USA
+REGN,"Regeneron Pharmaceuticals, Inc.",Biotechnology,USA
+LULU,Lululemon Athletica Inc.,Retail,Canada
+CHTR,"Charter Communications, Inc.",Telecommunications,USA
+SBUX,Starbucks Corporation,Consumer Goods,USA
+MCD,McDonald's Corporation,Consumer Goods,USA
+LOW,"Lowe's Companies, Inc.",Retail,USA
+CVS,CVS Health Corporation,Healthcare,USA
+TGT,Target Corporation,Retail,USA
+DHR,Danaher Corporation,Medical Devices,USA
+CI,Cigna Corporation,Healthcare,USA
