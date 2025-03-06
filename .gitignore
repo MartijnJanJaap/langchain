@@ -1,1 +1,56 @@
-OAI_CONFIG_LIST.json
+# IntelliJ-specific files
+.idea/
+*.iml
+*.iws
+out/
+
+# Byte-compiled / optimized / package files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+*.venv
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Python cache
+pip-wheel-metadata/
+*.pyo
+*.pyd
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Test and coverage reports
+.coverage
+.tox/
+.nox/
+htmlcov/
+
+# PyCharm-specific settings
+.idea/
+.vscode/
+
+# Docker
+.dockerignore
+
+# Security
+.env
+*.pem
+*.key
