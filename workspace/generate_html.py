@@ -1,11 +1,12 @@
-# filename: generate_csv_report.py
+# filename: generate_html.py
 
 import pandas as pd
 import os
+import config
 
 def generate_html():
     # Get CSV files in the current working directory
-    csv_files = [f for f in os.listdir('.') if f.endswith('.csv')]
+    csv_files = [f for f in os.listdir(config.output_csv_path) if f.endswith('.csv')]
 
     if not csv_files:
         print("No CSV files found in the current directory.")
@@ -13,7 +14,7 @@ def generate_html():
 
     # Initial load with the first CSV file
     initial_csv = csv_files[0]
-    df = pd.read_csv(initial_csv, quotechar='"')
+    df = pd.read_csv(config.output_csv_path+initial_csv, quotechar='"')
 
     # Generate HTML content
     html_content = f"""
@@ -210,9 +211,10 @@ def generate_html():
     """
 
     # Save the HTML content to a file
-    with open('csv_report_viewer.html', 'w') as f:
+    with open(config.output_html_path, 'w') as f:
         f.write(html_content)
 
-    print("HTML report viewer generated and saved as 'csv_report_viewer.html'")
+    print("HTML report viewer generated and saved as " + config.output_html_path)
 
-generate_html()
+if __name__ == "__main__":
+    generate_html()

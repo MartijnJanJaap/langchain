@@ -5,13 +5,13 @@ def main():
         env_or_file="OAI_CONFIG_LIST.json"
     )
 
-    with open("workspace/stock_report_2025-03-05.csv", "r") as f:
+    with open("workspace/reports/csv/stock_report_2025-03-05.csv", "r") as f:
         stock_report = f.read()
 
     with open("workspace/csv_report_viewer.html", "r") as f:
         existing_html_code = f.read()
 
-    with open("workspace/generate_csv_report.py", "r") as f:
+    with open("workspace/generate_html.py", "r") as f:
         generate_html_code = f.read()
 
     assistant = autogen.AssistantAgent(
