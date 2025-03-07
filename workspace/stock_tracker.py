@@ -27,55 +27,62 @@ def main():
 
     results = []
 
-    # for index, row in df.iterrows():
-    #     ticker = row['Ticker']
-    #     print("processing " + ticker)
-    #
-    #     try:
-    #         daily_data = fetch_stock_data(ticker, '5d')
-    #         weekly_data = fetch_stock_data(ticker, '7d')
-    #         monthly_data = fetch_stock_data(ticker, '1mo')
-    #
-    #         if daily_data.empty or weekly_data.empty or monthly_data.empty:
-    #             raise ValueError(f"{ticker}: possibly delisted; no price data found")
-    #
-    #         daily_change = (
-    #             calculate_percentage_difference(daily_data['Close'].iloc[-2], daily_data['Close'].iloc[-1])
-    #             if len(daily_data) >= 2 else "NAN"
-    #         )
-    #         weekly_change = (
-    #             calculate_percentage_difference(weekly_data['Close'].iloc[0], weekly_data['Close'].iloc[-1])
-    #             if len(weekly_data) >= 2 else "NAN"
-    #         )
-    #         monthly_change = (
-    #             calculate_percentage_difference(monthly_data['Close'].iloc[0], monthly_data['Close'].iloc[-1])
-    #             if len(monthly_data) >= 2 else "NAN"
-    #         )
-    #
-    #         results.append({
-    #             "Ticker": row['Ticker'],
-    #             "Company": row['Company'],
-    #             "Industry": row['Industry'],
-    #             "Country": row['Country'],
-    #             "Daily Change (%)": daily_change,
-    #             "Weekly Change (%)": weekly_change,
-    #             "Monthly Change (%)": monthly_change
-    #         })
-    #     except Exception as e:
-    #         print(f"Error processing ticker {ticker}: {e}")
-    #         results.append({
-    #             "Ticker": row['Ticker'],
-    #             "Company": row['Company'],
-    #             "Industry": row['Industry'],
-    #             "Country": row['Country'],
-    #             "Daily Change (%)": "NAN",
-    #             "Weekly Change (%)": "NAN",
-    #             "Monthly Change (%)": "NAN"
-    #         })
-    #
-    # report_df = pd.DataFrame(results)
-    # report_df.to_csv(output_file, index=False)
-    # print(f"Report generated: {output_file}")
+    for index, row in df.iterrows():
+        ticker = row['Ticker']
+        print("processing " + ticker)
+
+        try:
+            daily_data = fetch_stock_data(ticker, '5d')
+            weekly_data = fetch_stock_data(ticker, '7d')
+            monthly_data = fetch_stock_data(ticker, '1mo')
+            yearly_data = fetch_stock_data(ticker, '1y')  # Fetch yearly data
+
+            if daily_data.empty or weekly_data.empty or monthly_data.empty or yearly_data.empty:
+                raise ValueError(f"{ticker}: possibly delisted; no price data found")
+
+            daily_change = (
+                calculate_percentage_difference(daily_data['Close'].iloc[-2], daily_data['Close'].iloc[-1])
+                if len(daily_data) >= 2 else "NAN"
+            )
+            weekly_change = (
+                calculate_percentage_difference(weekly_data['Close'].iloc[0], weekly_data['Close'].iloc[-1])
+                if len(weekly_data) >= 2 else "NAN"
+            )
+            monthly_change = (
+                calculate_percentage_difference(monthly_data['Close'].iloc[0], monthly_data['Close'].iloc[-1])
+                if len(monthly_data) >= 2 else "NAN"
+            )
+            yearly_change = (
+                calculate_percentage_difference(yearly_data['Close'].iloc[0], yearly_data['Close'].iloc[-1])
+                if len(yearly_data) >= 2 else "NAN"
+            )
+
+            results.append({
+                "Ticker": row['Ticker'],
+                "Company": row['Company'],
+                "Industry": row['Industry'],
+                "Country": row['Country'],
+                "Daily Change (%)": daily_change,
+                "Weekly Change (%)": weekly_change,
+                "Monthly Change (%)": monthly_change,
+                "Yearly Change (%)": yearly_change  # Add the yearly change here
+            })
+        except Exception as e:
+            print(f"Error processing ticker {ticker}: {e}")
+            results.append({
+                "Ticker": row['Ticker'],
+                "Company": row['Company'],
+                "Industry": row['Industry'],
+                "Country": row['Country'],
+                "Daily Change (%)": "NAN",
+                "Weekly Change (%)": "NAN",
+                "Monthly Change (%)": "NAN",
+                "Yearly Change (%)": "NAN"
+            })
+
+    report_df = pd.DataFrame(results)
+    report_df.to_csv(output_file, index=False)
+    print(f"Report generated: {output_file}")
     htmlGenerator.generate_html()
 
 if __name__ == "__main__":
