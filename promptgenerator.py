@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 
-class FileSelector:
+class PromptGenerator:
     def __init__(self, root, workspace_dir):
         try:
             self.root = root
@@ -164,7 +164,7 @@ def save_prompt(prompt_text):
 def generate_full_prompt(workspace_dir):
     try:
         root = tk.Tk()
-        selector = FileSelector(root, workspace_dir)
+        selector = PromptGenerator(root, workspace_dir)
         root.mainloop()
     except Exception as e:
         print(f"[ERROR] Failed to initialize file selector: {e}")
