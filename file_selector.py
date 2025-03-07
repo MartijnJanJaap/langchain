@@ -119,6 +119,7 @@ class FileSelector:
         self.selected_files = selected_files
         self.user_input = self.text_input.get("1.0", tk.END).strip()
         self.root.quit()
+        self.root.destroy()  # Immediately close the UI
 
     def apply_styles(self):
         try:
