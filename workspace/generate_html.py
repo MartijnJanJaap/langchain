@@ -54,18 +54,27 @@ def generate_html():
                 width: 100%;
                 box-sizing: border-box;
             }}
+            #runButton {{
+                margin-top: 10px;
+                padding: 8px;
+                cursor: pointer;
+            }}
+            #status {{
+                margin-top: 10px;
+            }}
         </style>
     </head>
     <body>
-    
+
     <h2>CSV Report Viewer</h2>
-
     <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search...">
-
     <label for="csvSelect">Select CSV File:</label>
     <select id="csvSelect" onchange="loadCSV(this.value)">
     {''.join(f'<option value="{file}">{file}</option>' for file in csv_files)}
     </select>
+
+    <button id="runButton" onclick="runStockTracker()">Run Stock Tracker</button>
+    <div id="status"></div>
 
     <table id="dataTable">
         <thead>
@@ -83,7 +92,7 @@ def generate_html():
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("dataTable");
         switching = true;
-        dir = "asc"; 
+        dir = "asc";
         while (switching) {{
             switching = false;
             rows = table.rows;
@@ -120,7 +129,7 @@ def generate_html():
             if (shouldSwitch) {{
                 rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                 switching = true;
-                switchcount++;      
+                switchcount++;
             }} else {{
                 if (switchcount == 0 && dir == "asc") {{
                     dir = "desc";
@@ -136,7 +145,9 @@ def generate_html():
 
     function loadCSV(fileName) {{
         fetch(fileName)
-            .then(function(response) {{ return response.text(); }})
+            .then(function(response) {{
+                return response.text();
+            }})
             .then(function(data) {{
                 var lines = data.split('\\n');
                 var headers = lines[0].split(',');
@@ -152,7 +163,7 @@ def generate_html():
                     headerRow.appendChild(cell);
                 }}
                 newThead.appendChild(headerRow);
-                
+
                 for (var i = 1; i < lines.length; i++) {{
                     var regex = /("([^"]*)")|([^,]+)/g;
                     var cells = [];
@@ -204,12 +215,28 @@ def generate_html():
             }}
         }}
     }}
+
+    function runStockTracker() {{
+        document.getElementById("status").innerText = "Running Stock Tracker...";
+        
+        if (window.pywebview) {{
+            window.pywebview.api.runStockTracker()
+                .then(() => {{
+                    document.getElementById("status").innerText = "Stock Tracker completed.";
+                }})
+                .catch(err => {{
+                    console.error(err);
+                    document.getElementById("status").innerText = "Error running Stock Tracker.";
+                }});
+        }} else {{
+            console.error("PyWebView not found.");
+        }}
+    }}
     </script>
 
     </body>
     </html>
     """
-
     # Save the HTML content to a file
     with open(config.output_html_path, 'w') as f:
         f.write(html_content)

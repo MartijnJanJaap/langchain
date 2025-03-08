@@ -148,7 +148,7 @@ def read_file_content(file_path):
         print(f"[ERROR] Unexpected error reading file '{file_path}': {e}")
         return f"(Error reading file: {e})"
 
-def save_prompt(prompt_text):
+def save_user_input(prompt_text):
     try:
         prompts_dir = "prompts"
         os.makedirs(prompts_dir, exist_ok=True)
@@ -182,9 +182,9 @@ def generate_full_prompt(workspace_dir):
     if selector.user_input:
         prompt += f"### Additional Instructions:\n{selector.user_input}\n"
 
-    prompt_file = save_prompt(prompt)
-    if prompt_file:
-        print(f"Prompt saved to: {prompt_file}")
+    user_prompt_file = save_user_input(selector.user_input)
+    if user_prompt_file:
+        print(f"user prompt saved to: {user_prompt_file}")
     else:
         print("[ERROR] Prompt could not be saved.")
 
