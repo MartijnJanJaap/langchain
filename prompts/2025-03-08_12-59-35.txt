@@ -1,0 +1,2 @@
+I have my own stock_tracker app. Using python I generate html to display csv files which the stock_tracker.py generates. The view.html is auto generated through generate_html.py
+I want the generate_html.py to generate not a html page. but an angular app with different components. I was in the process. continue where it was last step.

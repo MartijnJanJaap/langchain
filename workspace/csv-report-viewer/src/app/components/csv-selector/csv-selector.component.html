@@ -1,0 +1,6 @@
+
+    <label for="fileSelect">Select CSV File:</label>
+    <select id="fileSelect" (change)="onFileSelected($event.target.value)">
+      <option *ngFor="let file of csvFiles" [value]="file">{{ file }}</option>
+    </select>
+    
