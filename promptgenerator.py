@@ -83,10 +83,8 @@ class PromptGenerator:
             with open(latest_prompt_file, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            if "### Additional Instructions:" in content:
-                return content.split("### Additional Instructions:")[-1].strip()
+            return content
 
-            return ""
         except Exception as e:
             print(f"[ERROR] Failed to retrieve last known prompt: {e}")
             return ""

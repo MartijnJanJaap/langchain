@@ -20,7 +20,7 @@ def main():
         name="user",
         human_input_mode="TERMINATE",
         code_execution_config={"work_dir": "workspace", "use_docker": False},
-        max_consecutive_auto_reply=4
+        max_consecutive_auto_reply=1
     )
 
     user_proxy.initiate_chat(assistant, message=full_prompt)

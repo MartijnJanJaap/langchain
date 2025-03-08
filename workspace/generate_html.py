@@ -14,7 +14,7 @@ def generate_html():
 
     # Initial load with the first CSV file
     initial_csv = csv_files[0]
-    df = pd.read_csv(config.output_csv_path+initial_csv, quotechar='"')
+    df = pd.read_csv(config.output_csv_path + initial_csv, quotechar='"')
 
     # Generate HTML content
     html_content = f"""
@@ -223,6 +223,9 @@ def generate_html():
             window.pywebview.api.runStockTracker()
                 .then(() => {{
                     document.getElementById("status").innerText = "Stock Tracker completed.";
+                    setTimeout(() => {{
+                        window.location.reload();
+                    }}, 1000); // Adjust the delay as needed
                 }})
                 .catch(err => {{
                     console.error(err);
