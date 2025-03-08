@@ -1,0 +1,2 @@
+I have my own stock_tracker app. Using python I generate html to display csv files which the stock_tracker.py generates. The view.html is auto generated through generate_html.py
+Now, I added a button in my html through the generate html code. this button uses PyWebView library to call the main function in stock_tracker.py. While the main function completes a it is indicated in the html that the file is running so the user knows it needs to wait. This all works. Now this all works already. However, when the main function completes. the page needs to refresh.
