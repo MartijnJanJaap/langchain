@@ -20,10 +20,9 @@ def add_dummy_node(tree, node):
 
 
 class FileSelector:
-    def __init__(self, parent, workspace_dir, prompts_dir):
+    def __init__(self, parent, root_dir):
         self.parent = parent
-        self.prompts_dir = prompts_dir
-        self.workspace_dir = os.path.abspath(workspace_dir)
+        self.workspace_dir = os.path.abspath(root_dir + "workspace/")
         self.selected_files = set()
         self.filter = FileFilter()
         self.user_input = ""
@@ -36,7 +35,7 @@ class FileSelector:
             self.toggle_selection
         )
 
-        last_prompt = get_last_known_prompt(self)
+        last_prompt = get_last_known_prompt(prompts_dir=root_dir+"prompts/")
         if last_prompt:
             self.ui.text_input.insert("1.0", last_prompt)
 
@@ -74,7 +73,7 @@ class FileSelector:
         except Exception as e:
             print(f"[ERROR] Could not load workspace contents: {e}")
 
-    def load_subdirectory(self, event):
+    def load_subdirectory(self):
         """Dynamically load subfolders only when a folder is expanded."""
         item = self.ui.tree.focus()
         real_path = item if item else ""

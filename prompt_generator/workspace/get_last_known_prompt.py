@@ -1,13 +1,13 @@
 import os
 
 
-def get_last_known_prompt(self):
+def get_last_known_prompt(prompts_dir):
     try:
-        if not os.path.exists(self.prompts_dir):
+        if not os.path.exists(prompts_dir):
             print("No prompts directory exists")
             return ""
 
-        prompt_files = [os.path.join(self.prompts_dir, f) for f in os.listdir(self.prompts_dir) if f.endswith(".txt")]
+        prompt_files = [os.path.join(prompts_dir, f) for f in os.listdir(prompts_dir) if f.endswith(".txt")]
         if not prompt_files:
             return ""
 

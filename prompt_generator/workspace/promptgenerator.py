@@ -1,5 +1,4 @@
 # filename: promptgenerator.py
-import os
 import tkinter as tk
 
 from prompt_generator.workspace.file_selector import FileSelector
@@ -7,10 +6,12 @@ from prompt_generator.workspace.file_structure_generator import FileStructureGen
 from prompt_generator.workspace.prompt_file_manager import save_user_input
 from prompt_generator.workspace.read_file_content import read_file_content
 
-def generate_full_prompt(workspace_dir, prompts_dir):
+def generate_full_prompt(root_dir):
+    workspace_dir = root_dir + "/workspace/"
+    prompts_dir = root_dir + "/prompts/"
     try:
         root = tk.Tk()
-        selector = FileSelector(root, workspace_dir, prompts_dir)
+        selector = FileSelector(root, root_dir)
 
         root.mainloop()
         root.destroy()  # Ensure the Tkinter application is properly closed
@@ -43,9 +44,7 @@ def generate_full_prompt(workspace_dir, prompts_dir):
     return prompt
 
 def main():
-    workspace_dir = r"C:\projects\portfoliomanager\prompt_generator\workspace"
-    prompts_dir = r"C:\projects\portfoliomanager\prompt_generator\prompts"
-    generate_full_prompt(workspace_dir, prompts_dir)
+    generate_full_prompt(r"C:\projects\portfoliomanager\prompt_generator\\")
 
 if __name__ == "__main__":
     main()

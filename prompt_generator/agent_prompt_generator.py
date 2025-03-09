@@ -3,7 +3,7 @@ from prompt_generator.workspace import promptgenerator
 
 
 def main():
-    full_prompt = promptgenerator.generate_full_prompt("C:\projects\portfoliomanager\prompt_generator\workspace", "C:\projects\portfoliomanager\prompt_generator\prompts")
+    full_prompt = promptgenerator.generate_full_prompt("C:\projects\portfoliomanager\prompt_generator\\")
 
     if not full_prompt:
         print("No prompt generated.")
