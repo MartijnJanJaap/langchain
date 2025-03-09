@@ -2,7 +2,9 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
-from file_selector import FileSelector  # Import the new file selection class
+
+from prompt_generator.workspace.file_selector import FileSelector
+
 
 class PromptGenerator:
     def __init__(self, root, workspace_dir):
@@ -46,7 +48,7 @@ class PromptGenerator:
     def get_last_known_prompt(self):
         """Retrieve the last known prompt from the latest saved file in the 'prompts' directory."""
         try:
-            prompts_dir = "prompts"
+            prompts_dir = "../../prompts"
             if not os.path.exists(prompts_dir):
                 print("no prompts directory exists")
                 return ""
@@ -108,7 +110,7 @@ def read_file_content(file_path):
 
 def save_user_input(prompt_text):
     try:
-        prompts_dir = "prompts"
+        prompts_dir = "../../prompts"
         os.makedirs(prompts_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = os.path.join(prompts_dir, f"{timestamp}.txt")
