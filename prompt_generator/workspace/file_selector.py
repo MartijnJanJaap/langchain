@@ -3,7 +3,8 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-from file_filter import FileFilter
+from prompt_generator.workspace.file_filter import FileFilter
+
 
 class FileSelector:
     def __init__(self, parent, workspace_dir):

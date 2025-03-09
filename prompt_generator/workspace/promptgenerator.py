@@ -4,8 +4,9 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 
-from file_selector import FileSelector
-from file_structure_generator import FileStructureGenerator
+from prompt_generator.workspace.file_selector import FileSelector
+from prompt_generator.workspace.file_structure_generator import FileStructureGenerator
+
 
 class PromptGenerator:
     def __init__(self, root, workspace_dir, prompts_dir):
