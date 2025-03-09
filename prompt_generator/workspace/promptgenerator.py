@@ -1,9 +1,23 @@
+# filename: C:\projects\portfoliomanager\prompt_generator\workspace\promptgenerator.py
 import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 
 from prompt_generator.workspace.file_selector import FileSelector
+
+
+def get_file_structure_string(directory):
+    """Recursively build the file structure as a string."""
+    file_structure = []
+    for dirpath, dirnames, filenames in os.walk(directory):
+        level = dirpath.replace(directory, '').count(os.sep)
+        indent = ' ' * 4 * level
+        file_structure.append(f"{indent}{os.path.basename(dirpath)}/")
+        subindent = ' ' * 4 * (level + 1)
+        for filename in filenames:
+            file_structure.append(f"{subindent}{filename}")
+    return "\n".join(file_structure)
 
 
 class PromptGenerator:
@@ -139,6 +153,10 @@ def generate_full_prompt(workspace_dir):
     for file_path in selector.selected_files:
         file_content = read_file_content(file_path)
         prompt += f"### File: {file_path}\n{file_content}\n\n"
+
+    # Including the whole file structure as a string in the prompt
+    file_structure = get_file_structure_string(workspace_dir)
+    prompt += "### Workspace File Structure:\n" + file_structure + "\n"
 
     if selector.user_input:
         prompt += f"### Additional Instructions:\n{selector.user_input}\n"

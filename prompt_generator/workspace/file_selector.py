@@ -13,7 +13,7 @@ class FileSelector:
         self.tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
 
         # Create Treeview with dark theme
-        self.tree = ttk.Treeview(self.tree_frame, show="tree")
+        self.tree = ttk.Treeview(self.tree_frame, show="tree", selectmode="none", columns=("checked",))
 
         # Apply styles to Treeview
         self.style = ttk.Style()
@@ -30,6 +30,8 @@ class FileSelector:
 
         self.populate_tree()
         self.tree.bind("<<TreeviewOpen>>", self.load_subdirectory)
+        self.tree.tag_configure("unchecked", background="#333333")
+        self.tree.tag_configure("checked", background="#666666", foreground="#FFBF00")
         self.tree.bind("<ButtonRelease-1>", self.toggle_selection)
 
         self.apply_styles()
@@ -52,10 +54,10 @@ class FileSelector:
             for entry in entries:
                 full_path = os.path.join(self.workspace_dir, entry)
                 if os.path.isdir(full_path):
-                    folder_id = self.tree.insert("", "end", iid=full_path, text=f"📁 {entry}", open=False)
+                    folder_id = self.tree.insert("", "end", iid=full_path, text=f"📁 {entry}", open=False, tags="unchecked")
                     self.add_dummy_node(folder_id)
                 elif os.path.isfile(full_path):
-                    self.tree.insert("", "end", iid=full_path, text=f"📄 {entry}")
+                    self.tree.insert("", "end", iid=full_path, text=f"📄 {entry}", tags="unchecked")
         except Exception as e:
             print(f"[ERROR] Could not load workspace contents: {e}")
 
@@ -89,12 +91,12 @@ class FileSelector:
                     files.append(full_path)
 
             for full_path, folder_name in subfolders:
-                folder_id = self.tree.insert(item, "end", iid=full_path, text=f"📁 {folder_name}", open=False)
+                folder_id = self.tree.insert(item, "end", iid=full_path, text=f"📁 {folder_name}", open=False, tags="unchecked")
                 self.add_dummy_node(folder_id)
 
             for file_path in files:
                 file_name = os.path.basename(file_path)
-                self.tree.insert(item, "end", iid=file_path, text=f"📄 {file_name}")
+                self.tree.insert(item, "end", iid=file_path, text=f"📄 {file_name}", tags="unchecked")
 
         except PermissionError:
             messagebox.showwarning("Permission Denied", f"Cannot access {real_path}.")
@@ -102,18 +104,26 @@ class FileSelector:
             print(f"[ERROR] Could not load folder '{real_path}': {e}")
 
     def toggle_selection(self, event):
-        """Select or deselect a file on click."""
-        item = self.tree.focus()
-        if not item or os.path.isdir(item):
-            return
-
-        if item in self.selected_files:
-            self.selected_files.remove(item)
-            self.tree.item(item, tags=())
-        else:
+        """Select or deselect a file by toggling the checkbox."""
+        item = self.tree.identify_row(event.y)
+        if item and self.tree.tag_has("unchecked", item):
+            self.tree.item(item, tags="checked")
             self.selected_files.add(item)
-            self.tree.item(item, tags=("selected",))
+        elif item and self.tree.tag_has("checked", item):
+            self.tree.item(item, tags="unchecked")
+            self.selected_files.remove(item)
 
     def get_selected_files(self):
         """Return the set of selected files."""
         return list(self.selected_files)
+
+def main():
+    root = tk.Tk()
+    root.title("File Selector")
+    # Correct the path based on actual directory structure
+    workspace_dir = r"C:\projects\portfoliomanager\prompt_generator\workspace"
+    FileSelector(root, workspace_dir=workspace_dir)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
