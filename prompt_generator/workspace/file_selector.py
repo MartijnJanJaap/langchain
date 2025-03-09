@@ -4,13 +4,9 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 class FileSelector:
-    def __init__(self, parent, workspace_dir, prompts_dir):
+    def __init__(self, parent, workspace_dir):
         self.parent = parent
         self.workspace_dir = os.path.abspath(workspace_dir)
-        self.prompts_dir = os.path.abspath(prompts_dir)  # Add prompts_dir argument
-
-        # Continue with the rest of the initialization code...
-
         self.selected_files = set()
 
         self.tree_frame = tk.Frame(self.parent, bg="#333333", padx=10, pady=10, relief=tk.RIDGE, borderwidth=2)
@@ -38,4 +34,86 @@ class FileSelector:
 
         self.apply_styles()
 
-    # rest of the class methods...
+    def apply_styles(self):
+        """Apply custom styles to keep a consistent dark theme."""
+        try:
+            style = ttk.Style()
+            style.configure("Treeview", background="#333333", fieldbackground="#333333", foreground="white",
+                            borderwidth=0)
+            style.configure("Dark.TButton", font=("Arial", 12, "bold"), padding=6)
+            style.configure("Vertical.TScrollbar", background="#333333", troughcolor="#222222", borderwidth=0)
+        except Exception as e:
+            print(f"[ERROR] Failed to apply UI styles: {e}")
+
+    def populate_tree(self):
+        """Start with the contents of the workspace folder, not the folder itself."""
+        try:
+            entries = sorted(os.listdir(self.workspace_dir))
+            for entry in entries:
+                full_path = os.path.join(self.workspace_dir, entry)
+                if os.path.isdir(full_path):
+                    folder_id = self.tree.insert("", "end", iid=full_path, text=f"📁 {entry}", open=False)
+                    self.add_dummy_node(folder_id)
+                elif os.path.isfile(full_path):
+                    self.tree.insert("", "end", iid=full_path, text=f"📄 {entry}")
+        except Exception as e:
+            print(f"[ERROR] Could not load workspace contents: {e}")
+
+    def add_dummy_node(self, node):
+        """Add a dummy node to indicate that a folder has subfolders."""
+        self.tree.insert(node, "end", iid=f"{node}_dummy", text="Loading...")
+
+    def remove_dummy_node(self, node):
+        """Remove the dummy 'Loading...' node."""
+        for child in self.tree.get_children(node):
+            if self.tree.item(child, "text") == "Loading...":
+                self.tree.delete(child)
+
+    def load_subdirectory(self, event):
+        """Dynamically load subfolders only when a folder is expanded."""
+        item = self.tree.focus()
+        real_path = item if item else ""
+
+        if not os.path.isdir(real_path):
+            return
+
+        self.remove_dummy_node(item)
+
+        try:
+            subfolders, files = [], []
+            for entry in sorted(os.listdir(real_path)):
+                full_path = os.path.join(real_path, entry)
+                if os.path.isdir(full_path):
+                    subfolders.append((full_path, os.path.basename(full_path)))
+                elif os.path.isfile(full_path):
+                    files.append(full_path)
+
+            for full_path, folder_name in subfolders:
+                folder_id = self.tree.insert(item, "end", iid=full_path, text=f"📁 {folder_name}", open=False)
+                self.add_dummy_node(folder_id)
+
+            for file_path in files:
+                file_name = os.path.basename(file_path)
+                self.tree.insert(item, "end", iid=file_path, text=f"📄 {file_name}")
+
+        except PermissionError:
+            messagebox.showwarning("Permission Denied", f"Cannot access {real_path}.")
+        except Exception as e:
+            print(f"[ERROR] Could not load folder '{real_path}': {e}")
+
+    def toggle_selection(self, event):
+        """Select or deselect a file on click."""
+        item = self.tree.focus()
+        if not item or os.path.isdir(item):
+            return
+
+        if item in self.selected_files:
+            self.selected_files.remove(item)
+            self.tree.item(item, tags=())
+        else:
+            self.selected_files.add(item)
+            self.tree.item(item, tags=("selected",))
+
+    def get_selected_files(self):
+        """Return the set of selected files."""
+        return list(self.selected_files)
