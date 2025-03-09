@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 from prompt_generator.workspace.file_filter import FileFilter
+from prompt_generator.workspace.get_last_known_prompt import get_last_known_prompt
 
 
 class FileSelector:
@@ -12,6 +13,7 @@ class FileSelector:
         self.workspace_dir = os.path.abspath(workspace_dir)
         self.selected_files = set()
         self.filter = FileFilter()
+        self.user_input = ""
 
         self.tree_frame = tk.Frame(self.parent, bg="#333333", padx=10, pady=10, relief=tk.RIDGE, borderwidth=2)
         self.tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
@@ -38,10 +40,33 @@ class FileSelector:
         self.tree.tag_configure("checked", background="#666666", foreground="#FFBF00")
         self.tree.bind("<ButtonRelease-1>", self.toggle_selection)
 
+        ## Corrected section starts here
+        ttk.Label(self.parent, text="Enter additional instructions:",
+                  font=("Arial", 12), foreground="white", background="#222222").pack(pady=5)
+
+        self.text_input = tk.Text(self.parent, height=4, width=80, bg="#333333", fg="white",
+                                  font=("Arial", 12), insertbackground="lime")
+        self.text_input.pack(pady=5, padx=20)
+
+        last_prompt = get_last_known_prompt(parent)
+        if last_prompt:
+            self.text_input.insert("1.0", last_prompt)
+
+        self.button_frame = tk.Frame(self.parent, bg="#222222")
+        self.button_frame.pack(fill=tk.X, padx=20, pady=10)
+
+        self.ok_button = ttk.Button(self.button_frame, text="Generate Prompt",
+                                    command=self.generate_prompt, style="Dark.TButton")
+        self.ok_button.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
+
+        self.cancel_button = ttk.Button(self.button_frame, text="Cancel",
+                                        command=self.parent.quit, style="Dark.TButton")
+        self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
+        ## Corrected section ends here
+
         self.apply_styles()
 
     def apply_styles(self):
-        """Apply custom styles to keep a consistent dark theme."""
         try:
             style = ttk.Style()
             style.configure("Treeview", background="#333333", fieldbackground="#333333", foreground="white",
@@ -52,7 +77,6 @@ class FileSelector:
             print(f"[ERROR] Failed to apply UI styles: {e}")
 
     def populate_tree(self):
-        """Start with the contents of the workspace folder, not the folder itself."""
         try:
             entries = sorted(os.listdir(self.workspace_dir))
             for entry in entries:
@@ -112,7 +136,6 @@ class FileSelector:
             print(f"[ERROR] Could not load folder '{real_path}': {e}")
 
     def toggle_selection(self, event):
-        """Select or deselect a file by toggling the checkbox."""
         item = self.tree.identify_row(event.y)
         if item and self.tree.tag_has("unchecked", item):
             self.tree.item(item, tags="checked")
@@ -122,16 +145,9 @@ class FileSelector:
             self.selected_files.remove(item)
 
     def get_selected_files(self):
-        """Return the set of selected files."""
         return list(self.selected_files)
 
-def main():
-    root = tk.Tk()
-    root.title("File Selector")
-    # Correct the path based on actual directory structure
-    workspace_dir = r"C:\projects\portfoliomanager\prompt_generator\workspace"
-    FileSelector(root, workspace_dir=workspace_dir)
-    root.mainloop()
+    def generate_prompt(self):
+        self.user_input = self.text_input.get("1.0", tk.END).strip()
+        self.parent.quit()
 
-if __name__ == "__main__":
-    main()
