@@ -1,0 +1,1 @@
+change the ui_manager in a way that the windows outer container in dark. give full file of the code as it's automatically copy paster from your output.

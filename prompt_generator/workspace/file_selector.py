@@ -15,7 +15,10 @@ class FileSelector:
         self.filter = FileFilter()
         self.user_input = ""
 
-        self.tree_frame = tk.Frame(self.parent, bg="#333333", padx=10, pady=10, relief=tk.RIDGE, borderwidth=2)
+        # Set the parent (root window's) background to black
+        self.parent.configure(bg="#000000")
+
+        self.tree_frame = tk.Frame(self.parent, bg="#000000", padx=10, pady=10, relief=tk.RIDGE, borderwidth=2)
         self.tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
 
         # Create Treeview with dark theme
@@ -25,8 +28,9 @@ class FileSelector:
         self.style = ttk.Style()
         self.style.theme_use("clam")
         self.style.configure("Treeview", background="#333333", fieldbackground="#333333", foreground="white")
-        self.style.configure("Treeview.Heading", background="#222222", foreground="white")  # Fix header color
-
+        self.style.configure("Treeview.Heading", background="#222222", foreground="white")
+        self.style.configure("Dark.TButton", font=("Arial", 12, "bold"), padding=6, background="#333333")
+        
         self.tree.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
 
         # Scrollbar with dark theme
@@ -40,9 +44,8 @@ class FileSelector:
         self.tree.tag_configure("checked", background="#666666", foreground="#FFBF00")
         self.tree.bind("<ButtonRelease-1>", self.toggle_selection)
 
-        ## Corrected section starts here
         ttk.Label(self.parent, text="Enter additional instructions:",
-                  font=("Arial", 12), foreground="white", background="#222222").pack(pady=5)
+                  font=("Arial", 12), foreground="white", background="#000000").pack(pady=5)
 
         self.text_input = tk.Text(self.parent, height=4, width=80, bg="#333333", fg="white",
                                   font=("Arial", 12), insertbackground="lime")
@@ -52,7 +55,7 @@ class FileSelector:
         if last_prompt:
             self.text_input.insert("1.0", last_prompt)
 
-        self.button_frame = tk.Frame(self.parent, bg="#222222")
+        self.button_frame = tk.Frame(self.parent, bg="#000000")
         self.button_frame.pack(fill=tk.X, padx=20, pady=10)
 
         self.ok_button = ttk.Button(self.button_frame, text="Generate Prompt",
@@ -62,7 +65,6 @@ class FileSelector:
         self.cancel_button = ttk.Button(self.button_frame, text="Cancel",
                                         command=self.parent.quit, style="Dark.TButton")
         self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
-        ## Corrected section ends here
 
         self.apply_styles()
 

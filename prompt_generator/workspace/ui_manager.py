@@ -1,6 +1,7 @@
 # filename: ui_manager.py
 import tkinter as tk
 from tkinter import ttk
+from prompt_generator.workspace.style_manager import apply_default_styles
 
 class UIManager:
     def __init__(self, root, file_selector_callback, generate_prompt_callback, cancel_callback):
@@ -8,11 +9,19 @@ class UIManager:
         self.file_selector_callback = file_selector_callback
         self.generate_prompt_callback = generate_prompt_callback
         self.cancel_callback = cancel_callback
-
+        
+        # Apply default styles with dark theme
+        apply_default_styles()
+    
     def setup_ui(self):
         self.root.title("Generate AI Prompt")
         self.root.geometry("850x600")
-        self.root.configure(bg="#000000")  # Full black background
+        self.root.configure(bg="#000000")  # Set a dark background for the outer container of the window
+
+        # Set ttk styles with explicit fieldbackground
+        style = ttk.Style()
+        style.configure("TLabel", background="#000000")
+        style.configure("TButton", background="#000000")
 
         # Label with dark background
         ttk.Label(self.root, text="Select files to include:",
