@@ -19,11 +19,12 @@ def get_file_structure_string(directory):
     return "\n".join(file_structure)
 
 class PromptGenerator:
-    def __init__(self, root, workspace_dir):
+    def __init__(self, root, workspace_dir, prompts_dir):
         try:
             self.root = root
             self.root.title("Generate AI Prompt")
             self.workspace_dir = workspace_dir
+            self.prompts_dir = prompts_dir
             self.selected_files = []
             self.user_input = ""
 
@@ -63,12 +64,11 @@ class PromptGenerator:
 
     def get_last_known_prompt(self):
         try:
-            prompts_dir = os.path.join(os.path.dirname(self.workspace_dir), "prompts")
-            if not os.path.exists(prompts_dir):
-                print("no prompts directory exists")
+            if not os.path.exists(self.prompts_dir):
+                print("No prompts directory exists")
                 return ""
 
-            prompt_files = [os.path.join(prompts_dir, f) for f in os.listdir(prompts_dir) if f.endswith(".txt")]
+            prompt_files = [os.path.join(self.prompts_dir, f) for f in os.listdir(self.prompts_dir) if f.endswith(".txt")]
             if not prompt_files:
                 return ""
 
@@ -121,9 +121,8 @@ def read_file_content(file_path):
         print(f"[ERROR] Unexpected error reading file '{file_path}': {e}")
         return f"(Error reading file: {e})"
 
-def save_user_input(workspace_dir, prompt_text):
+def save_user_input(prompts_dir, prompt_text):
     try:
-        prompts_dir = os.path.join(os.path.dirname(workspace_dir), "prompts")
         os.makedirs(prompts_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = os.path.join(prompts_dir, f"{timestamp}.txt")
@@ -134,10 +133,10 @@ def save_user_input(workspace_dir, prompt_text):
         print(f"[ERROR] Failed to save prompt: {e}")
         return None
 
-def generate_full_prompt(workspace_dir):
+def generate_full_prompt(workspace_dir, prompts_dir):
     try:
         root = tk.Tk()
-        selector = PromptGenerator(root, workspace_dir)
+        selector = PromptGenerator(root, workspace_dir, prompts_dir)
         root.mainloop()
     except Exception as e:
         print(f"[ERROR] Failed to initialize file selector: {e}")
@@ -158,7 +157,7 @@ def generate_full_prompt(workspace_dir):
     if selector.user_input:
         prompt += f"### Additional Instructions:\n{selector.user_input}\n"
 
-    user_prompt_file = save_user_input(workspace_dir, selector.user_input)
+    user_prompt_file = save_user_input(prompts_dir, selector.user_input)
     if user_prompt_file:
         print(f"user prompt saved to: {user_prompt_file}")
     else:
@@ -168,7 +167,8 @@ def generate_full_prompt(workspace_dir):
 
 def main():
     workspace_dir = r"C:\projects\portfoliomanager\prompt_generator\workspace"
-    generate_full_prompt(workspace_dir)
+    prompts_dir = r"C:\projects\portfoliomanager\prompt_generator\prompts"
+    generate_full_prompt(workspace_dir, prompts_dir)
 
 if __name__ == "__main__":
     main()

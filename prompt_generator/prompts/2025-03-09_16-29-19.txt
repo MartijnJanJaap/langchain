@@ -1,0 +1,1 @@
+when promptgenerator is called. I want the absolute path to the workspace to be a parameter. and i also want the prompts folder path to be a parameter.
