@@ -1,0 +1,1 @@
+I want to implement a new feature and as much as possible in a seperate python file. look for a .gitignore file in the workspace. If there is one. use that to filter out files in 1) selection 2) folder tree and also filter out __pycache__

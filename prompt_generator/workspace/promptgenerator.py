@@ -5,18 +5,8 @@ from tkinter import ttk, messagebox
 from datetime import datetime
 
 from prompt_generator.workspace.file_selector import FileSelector
+from prompt_generator.workspace.file_structure_generator import FileStructureGenerator
 
-def get_file_structure_string(directory):
-    """Recursively build the file structure as a string."""
-    file_structure = []
-    for dirpath, dirnames, filenames in os.walk(directory):
-        level = dirpath.replace(directory, '').count(os.sep)
-        indent = ' ' * 4 * level
-        file_structure.append(f"{indent}{os.path.basename(dirpath)}/")
-        subindent = ' ' * 4 * (level + 1)
-        for filename in filenames:
-            file_structure.append(f"{subindent}{filename}")
-    return "\n".join(file_structure)
 
 class PromptGenerator:
     def __init__(self, root, workspace_dir, prompts_dir):
@@ -151,7 +141,8 @@ def generate_full_prompt(workspace_dir, prompts_dir):
         file_content = read_file_content(file_path)
         prompt += f"### File: {file_path}\n{file_content}\n\n"
 
-    file_structure = get_file_structure_string(workspace_dir)
+    fs_generator = FileStructureGenerator(workspace_dir)
+    file_structure = fs_generator.get_file_structure_string()
     prompt += "### Workspace File Structure:\n" + file_structure + "\n"
 
     if selector.user_input:
