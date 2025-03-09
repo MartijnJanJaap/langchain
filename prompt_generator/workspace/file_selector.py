@@ -3,14 +3,14 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-from prompt_generator.workspace.gitignore_filter import GitignoreFilter
+from file_filter import FileFilter
 
 class FileSelector:
     def __init__(self, parent, workspace_dir):
         self.parent = parent
         self.workspace_dir = os.path.abspath(workspace_dir)
         self.selected_files = set()
-        self.gitignore_filter = GitignoreFilter(workspace_dir)
+        self.filter = FileFilter()
 
         self.tree_frame = tk.Frame(self.parent, bg="#333333", padx=10, pady=10, relief=tk.RIDGE, borderwidth=2)
         self.tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
@@ -56,7 +56,7 @@ class FileSelector:
             entries = sorted(os.listdir(self.workspace_dir))
             for entry in entries:
                 full_path = os.path.join(self.workspace_dir, entry)
-                if self.gitignore_filter.is_ignored(full_path):
+                if self.filter.is_ignored(full_path):
                     continue
                 if os.path.isdir(full_path):
                     folder_id = self.tree.insert("", "end", iid=full_path, text=f"📁 {entry}", open=False, tags="unchecked")
@@ -90,7 +90,7 @@ class FileSelector:
             subfolders, files = [], []
             for entry in sorted(os.listdir(real_path)):
                 full_path = os.path.join(real_path, entry)
-                if self.gitignore_filter.is_ignored(full_path):
+                if self.filter.is_ignored(full_path):
                     continue
                 if os.path.isdir(full_path):
                     subfolders.append((full_path, os.path.basename(full_path)))

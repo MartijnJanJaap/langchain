@@ -1,12 +1,11 @@
-# filename: C:\projects\portfoliomanager\prompt_generator\workspace\promptgenerator.py
+# filename: promptgenerator.py
 import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
 
-from prompt_generator.workspace.file_selector import FileSelector
-from prompt_generator.workspace.file_structure_generator import FileStructureGenerator
-
+from file_selector import FileSelector
+from file_structure_generator import FileStructureGenerator
 
 class PromptGenerator:
     def __init__(self, root, workspace_dir, prompts_dir):
@@ -24,7 +23,7 @@ class PromptGenerator:
             ttk.Label(self.root, text="Select files to include:",
                       font=("Arial", 14, "bold"), foreground="white", background="#222222").pack(pady=10)
 
-            self.file_selector = FileSelector(self.root, workspace_dir)  # Using FileSelector
+            self.file_selector = FileSelector(self.root, workspace_dir)
 
             ttk.Label(self.root, text="Enter additional instructions:",
                       font=("Arial", 12), foreground="white", background="#222222").pack(pady=5)
