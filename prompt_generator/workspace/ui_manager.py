@@ -12,23 +12,27 @@ class UIManager:
     def setup_ui(self):
         self.root.title("Generate AI Prompt")
         self.root.geometry("850x600")
-        self.root.configure(bg="#222222")
+        self.root.configure(bg="#000000")  # Full black background
 
+        # Label with dark background
         ttk.Label(self.root, text="Select files to include:",
-                  font=("Arial", 14, "bold"), foreground="white", background="#222222").pack(pady=10)
+                  font=("Arial", 14, "bold"), foreground="white", background="#000000").pack(pady=10)
 
         self.file_selector = self.file_selector_callback(self.root)
 
+        # Label with dark background
         ttk.Label(self.root, text="Enter additional instructions:",
-                  font=("Arial", 12), foreground="white", background="#222222").pack(pady=5)
+                  font=("Arial", 12), foreground="white", background="#000000").pack(pady=5)
 
-        self.text_input = tk.Text(self.root, height=4, width=80, bg="#333333", fg="white",
+        # Text input with dark background
+        self.text_input = tk.Text(self.root, height=4, width=80, bg="#000000", fg="white",
                                   font=("Arial", 12), insertbackground="lime")
         self.text_input.pack(pady=5, padx=20)
 
-        self.button_frame = tk.Frame(self.root, bg="#222222")
+        self.button_frame = tk.Frame(self.root, bg="#000000")  # Black frame background
         self.button_frame.pack(fill=tk.X, padx=20, pady=10)
 
+        # Buttons with dark style applied (ensures consistency)
         self.ok_button = ttk.Button(self.button_frame, text="Generate Prompt",
                                     command=self.generate_prompt_callback, style="Dark.TButton")
         self.ok_button.pack(side=tk.LEFT, expand=True, padx=5, pady=5)

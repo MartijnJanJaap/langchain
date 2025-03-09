@@ -1,0 +1,1 @@
+the window should be black and no white spaces in the window.

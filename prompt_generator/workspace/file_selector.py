@@ -6,10 +6,10 @@ from tkinter import ttk, messagebox
 from prompt_generator.workspace.file_filter import FileFilter
 from prompt_generator.workspace.get_last_known_prompt import get_last_known_prompt
 
-
 class FileSelector:
-    def __init__(self, parent, workspace_dir):
+    def __init__(self, parent, workspace_dir, prompts_dir):
         self.parent = parent
+        self.prompts_dir = prompts_dir
         self.workspace_dir = os.path.abspath(workspace_dir)
         self.selected_files = set()
         self.filter = FileFilter()
@@ -48,7 +48,7 @@ class FileSelector:
                                   font=("Arial", 12), insertbackground="lime")
         self.text_input.pack(pady=5, padx=20)
 
-        last_prompt = get_last_known_prompt(parent)
+        last_prompt = get_last_known_prompt(self)
         if last_prompt:
             self.text_input.insert("1.0", last_prompt)
 
@@ -150,4 +150,3 @@ class FileSelector:
     def generate_prompt(self):
         self.user_input = self.text_input.get("1.0", tk.END).strip()
         self.parent.quit()
-

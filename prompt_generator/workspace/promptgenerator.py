@@ -4,15 +4,16 @@ import tkinter as tk
 
 from prompt_generator.workspace.file_selector import FileSelector
 from prompt_generator.workspace.file_structure_generator import FileStructureGenerator
-from prompt_file_manager import SaveUserInput
+from prompt_generator.workspace.prompt_file_manager import save_user_input
 from prompt_generator.workspace.read_file_content import read_file_content
 
 def generate_full_prompt(workspace_dir, prompts_dir):
     try:
         root = tk.Tk()
-        selector = FileSelector(root, workspace_dir)
+        selector = FileSelector(root, workspace_dir, prompts_dir)
 
         root.mainloop()
+        root.destroy()  # Ensure the Tkinter application is properly closed
     except Exception as e:
         print(f"[ERROR] Failed to initialize file selector: {e}")
         return None
@@ -33,7 +34,7 @@ def generate_full_prompt(workspace_dir, prompts_dir):
     if selector.user_input:
         prompt += f"### Additional Instructions:\n{selector.user_input}\n"
 
-    user_prompt_file = SaveUserInput.save_user_input(prompts_dir, selector.user_input)
+    user_prompt_file = save_user_input(prompts_dir, selector.user_input)
     if user_prompt_file:
         print(f"user prompt saved to: {user_prompt_file}")
     else:
