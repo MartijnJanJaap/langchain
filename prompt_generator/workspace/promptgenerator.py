@@ -6,7 +6,6 @@ from datetime import datetime
 
 from prompt_generator.workspace.file_selector import FileSelector
 
-
 def get_file_structure_string(directory):
     """Recursively build the file structure as a string."""
     file_structure = []
@@ -18,7 +17,6 @@ def get_file_structure_string(directory):
         for filename in filenames:
             file_structure.append(f"{subindent}{filename}")
     return "\n".join(file_structure)
-
 
 class PromptGenerator:
     def __init__(self, root, workspace_dir):
@@ -32,11 +30,13 @@ class PromptGenerator:
             self.root.geometry("850x600")
             self.root.configure(bg="#222222")
 
-            ttk.Label(self.root, text="Select files to include:", font=("Arial", 14, "bold"), foreground="white", background="#222222").pack(pady=10)
+            ttk.Label(self.root, text="Select files to include:",
+                      font=("Arial", 14, "bold"), foreground="white", background="#222222").pack(pady=10)
 
             self.file_selector = FileSelector(self.root, workspace_dir)  # Using FileSelector
 
-            ttk.Label(self.root, text="Enter additional instructions:", font=("Arial", 12), foreground="white", background="#222222").pack(pady=5)
+            ttk.Label(self.root, text="Enter additional instructions:",
+                      font=("Arial", 12), foreground="white", background="#222222").pack(pady=5)
 
             self.text_input = tk.Text(self.root, height=4, width=80, bg="#333333", fg="white",
                                       font=("Arial", 12), insertbackground="lime")
@@ -49,10 +49,12 @@ class PromptGenerator:
             self.button_frame = tk.Frame(self.root, bg="#222222")
             self.button_frame.pack(fill=tk.X, padx=20, pady=10)
 
-            self.ok_button = ttk.Button(self.button_frame, text="Generate Prompt", command=self.generate_prompt, style="Dark.TButton")
+            self.ok_button = ttk.Button(self.button_frame, text="Generate Prompt",
+                                        command=self.generate_prompt, style="Dark.TButton")
             self.ok_button.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
-            self.cancel_button = ttk.Button(self.button_frame, text="Cancel", command=root.quit, style="Dark.TButton")
+            self.cancel_button = ttk.Button(self.button_frame, text="Cancel",
+                                            command=root.quit, style="Dark.TButton")
             self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
 
             self.apply_styles()
@@ -60,9 +62,8 @@ class PromptGenerator:
             print(f"[ERROR] Failed to initialize UI: {e}")
 
     def get_last_known_prompt(self):
-        """Retrieve the last known prompt from the latest saved file in the 'prompts' directory."""
         try:
-            prompts_dir = "../../prompts"
+            prompts_dir = os.path.join(os.path.dirname(self.workspace_dir), "prompts")
             if not os.path.exists(prompts_dir):
                 print("no prompts directory exists")
                 return ""
@@ -81,7 +82,6 @@ class PromptGenerator:
             return ""
 
     def generate_prompt(self):
-        """Generate the final prompt with selected files and user input."""
         selected_files = self.file_selector.get_selected_files()
         if not selected_files:
             messagebox.showwarning("No Selection", "Please select at least one file!")
@@ -93,7 +93,6 @@ class PromptGenerator:
         self.root.destroy()
 
     def apply_styles(self):
-        """Apply custom styles to keep a consistent dark theme."""
         try:
             style = ttk.Style()
             style.configure("Treeview", background="#333333", fieldbackground="#333333", foreground="white")
@@ -122,9 +121,9 @@ def read_file_content(file_path):
         print(f"[ERROR] Unexpected error reading file '{file_path}': {e}")
         return f"(Error reading file: {e})"
 
-def save_user_input(prompt_text):
+def save_user_input(workspace_dir, prompt_text):
     try:
-        prompts_dir = "../../prompts"
+        prompts_dir = os.path.join(os.path.dirname(workspace_dir), "prompts")
         os.makedirs(prompts_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = os.path.join(prompts_dir, f"{timestamp}.txt")
@@ -136,7 +135,6 @@ def save_user_input(prompt_text):
         return None
 
 def generate_full_prompt(workspace_dir):
-    """Launch the UI and process selected files."""
     try:
         root = tk.Tk()
         selector = PromptGenerator(root, workspace_dir)
@@ -154,17 +152,23 @@ def generate_full_prompt(workspace_dir):
         file_content = read_file_content(file_path)
         prompt += f"### File: {file_path}\n{file_content}\n\n"
 
-    # Including the whole file structure as a string in the prompt
     file_structure = get_file_structure_string(workspace_dir)
     prompt += "### Workspace File Structure:\n" + file_structure + "\n"
 
     if selector.user_input:
         prompt += f"### Additional Instructions:\n{selector.user_input}\n"
 
-    user_prompt_file = save_user_input(selector.user_input)
+    user_prompt_file = save_user_input(workspace_dir, selector.user_input)
     if user_prompt_file:
         print(f"user prompt saved to: {user_prompt_file}")
     else:
         print("[ERROR] Prompt could not be saved.")
 
     return prompt
+
+def main():
+    workspace_dir = r"C:\projects\portfoliomanager\prompt_generator\workspace"
+    generate_full_prompt(workspace_dir)
+
+if __name__ == "__main__":
+    main()
