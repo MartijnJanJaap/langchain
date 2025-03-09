@@ -63,10 +63,16 @@ class FileSelector:
         self.ok_button.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
         self.cancel_button = ttk.Button(self.button_frame, text="Cancel",
-                                        command=self.parent.quit, style="Dark.TButton")
+                                        command=self.cancel_action, style="Dark.TButton")
         self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
 
         self.apply_styles()
+
+    def cancel_action(self):
+        """Cancel action that clears selection and quits."""
+        self.selected_files.clear()  # Clear the selected files
+        self.user_input = ""  # Optionally, clear any user input as well
+        self.parent.quit()
 
     def apply_styles(self):
         try:
