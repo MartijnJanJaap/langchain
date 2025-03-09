@@ -1,58 +1,62 @@
 # filename: ui_manager.py
 import tkinter as tk
 from tkinter import ttk
-from prompt_generator.workspace.style_manager import apply_default_styles
 
-class UIManager:
-    def __init__(self, root, file_selector_callback, generate_prompt_callback, cancel_callback):
-        self.root = root
-        self.file_selector_callback = file_selector_callback
-        self.generate_prompt_callback = generate_prompt_callback
-        self.cancel_callback = cancel_callback
-        
-        # Apply default styles with dark theme
-        apply_default_styles()
-    
-    def setup_ui(self):
-        self.root.title("Generate AI Prompt")
-        self.root.geometry("850x600")
-        self.root.configure(bg="#000000")  # Set a dark background for the outer container of the window
 
-        # Set ttk styles with explicit fieldbackground
+def apply_styles():
+    try:
         style = ttk.Style()
-        style.configure("TLabel", background="#000000")
-        style.configure("TButton", background="#000000")
+        style.configure("Treeview", background="#333333", fieldbackground="#333333", foreground="white",
+                        borderwidth=0)
+        style.configure("Dark.TButton", font=("Arial", 12, "bold"), padding=6)
+        style.configure("Vertical.TScrollbar", background="#333333", troughcolor="#222222", borderwidth=0)
+    except Exception as e:
+        print(f"[ERROR] Failed to apply UI styles: {e}")
 
-        # Label with dark background
-        ttk.Label(self.root, text="Select files to include:",
-                  font=("Arial", 14, "bold"), foreground="white", background="#000000").pack(pady=10)
 
-        self.file_selector = self.file_selector_callback(self.root)
+class UIFileSelector:
+    def __init__(self, parent, workspace_dir, populate_tree_callback, load_subdirectory_callback, toggle_selection_callback):
+        self.parent = parent
 
-        # Label with dark background
-        ttk.Label(self.root, text="Enter additional instructions:",
+        # Apply styles
+        apply_styles()
+
+        # Set the parent (root window's) background to black
+        self.parent.configure(bg="#000000")
+
+        self.tree_frame = tk.Frame(self.parent, bg="#000000", padx=10, pady=10, relief=tk.RIDGE, borderwidth=2)
+        self.tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+
+        # Create Treeview with dark theme
+        self.tree = ttk.Treeview(self.tree_frame, show="tree", selectmode="none", columns=("checked",))
+
+        # Apply styles to Treeview
+        self.style = ttk.Style()
+        self.style.theme_use("clam")
+        self.style.configure("Treeview", background="#333333", fieldbackground="#333333", foreground="white")
+        self.style.configure("Treeview.Heading", background="#222222", foreground="white")
+        self.style.configure("Dark.TButton", font=("Arial", 12, "bold"), padding=6, background="#333333")
+        
+        self.tree.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
+
+        # Scrollbar with dark theme
+        self.scrollbar = ttk.Scrollbar(self.tree_frame, orient="vertical", command=self.tree.yview)
+        self.scrollbar.pack(side=tk.RIGHT, fill="y")
+        self.tree.configure(yscrollcommand=self.scrollbar.set)
+
+        self.populate_tree_callback = populate_tree_callback
+        self.load_subdirectory_callback = load_subdirectory_callback
+        self.toggle_selection_callback = toggle_selection_callback
+
+        self.populate_tree_callback(self.tree)
+        self.tree.bind("<<TreeviewOpen>>", self.load_subdirectory_callback)
+        self.tree.tag_configure("unchecked", background="#333333")
+        self.tree.tag_configure("checked", background="#666666", foreground="#FFBF00")
+        self.tree.bind("<ButtonRelease-1>", self.toggle_selection_callback)
+
+        ttk.Label(self.parent, text="Enter additional instructions:",
                   font=("Arial", 12), foreground="white", background="#000000").pack(pady=5)
 
-        # Text input with dark background
-        self.text_input = tk.Text(self.root, height=4, width=80, bg="#000000", fg="white",
+        self.text_input = tk.Text(self.parent, height=4, width=80, bg="#333333", fg="white",
                                   font=("Arial", 12), insertbackground="lime")
         self.text_input.pack(pady=5, padx=20)
-
-        self.button_frame = tk.Frame(self.root, bg="#000000")  # Black frame background
-        self.button_frame.pack(fill=tk.X, padx=20, pady=10)
-
-        # Buttons with dark style applied (ensures consistency)
-        self.ok_button = ttk.Button(self.button_frame, text="Generate Prompt",
-                                    command=self.generate_prompt_callback, style="Dark.TButton")
-        self.ok_button.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
-
-        self.cancel_button = ttk.Button(self.button_frame, text="Cancel",
-                                        command=self.cancel_callback, style="Dark.TButton")
-        self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
-
-    def get_user_input(self):
-        return self.text_input.get("1.0", tk.END).strip()
-
-    def set_initial_prompt(self, prompt_text):
-        if prompt_text:
-            self.text_input.insert("1.0", prompt_text)
