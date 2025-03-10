@@ -2,7 +2,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-
 def apply_styles():
     try:
         style = ttk.Style()
@@ -12,7 +11,6 @@ def apply_styles():
         style.configure("Vertical.TScrollbar", background="#333333", troughcolor="#222222", borderwidth=0)
     except Exception as e:
         print(f"[ERROR] Failed to apply UI styles: {e}")
-
 
 class UIFileSelector:
     def __init__(self, parent, workspace_dir, populate_tree_callback, load_subdirectory_callback, toggle_selection_callback):
