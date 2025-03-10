@@ -1,4 +1,3 @@
-# filename: file_selector.py
 import os
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -53,9 +52,8 @@ class FileSelector:
         self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
 
     def cancel_action(self):
-        """Cancel action that clears selection and quits."""
-        self.selected_files.clear()  # Clear the selected files
-        self.user_input = ""  # Optionally, clear any user input as well
+        self.selected_files.clear()
+        self.user_input = ""
         self.parent.quit()
 
     def populate_tree(self, tree):
@@ -66,15 +64,14 @@ class FileSelector:
                 if self.filter.is_ignored(full_path):
                     continue
                 if os.path.isdir(full_path):
-                    folder_id = tree.insert("", "end", iid=full_path, text=f"📁 {entry}", open=False, tags="unchecked")
+                    folder_id = tree.insert("", "end", iid=full_path, text=f"\U0001F4C1 {entry}", open=False, tags="unchecked")
                     add_dummy_node(tree, folder_id)
                 elif os.path.isfile(full_path):
-                    tree.insert("", "end", iid=full_path, text=f"📄 {entry}", tags="unchecked")
+                    tree.insert("", "end", iid=full_path, text=f"\U0001F4C4 {entry}", tags="unchecked")
         except Exception as e:
             print(f"[ERROR] Could not load workspace contents: {e}")
 
-    def load_subdirectory(self):
-        """Dynamically load subfolders only when a folder is expanded."""
+    def load_subdirectory(self, event=None):
         item = self.ui.tree.focus()
         real_path = item if item else ""
 
@@ -95,12 +92,12 @@ class FileSelector:
                     files.append(full_path)
 
             for full_path, folder_name in subfolders:
-                folder_id = self.ui.tree.insert(item, "end", iid=full_path, text=f"📁 {folder_name}", open=False, tags="unchecked")
+                folder_id = self.ui.tree.insert(item, "end", iid=full_path, text=f"\U0001F4C1 {folder_name}", open=False, tags="unchecked")
                 add_dummy_node(self.ui.tree, folder_id)
 
             for file_path in files:
                 file_name = os.path.basename(file_path)
-                self.ui.tree.insert(item, "end", iid=file_path, text=f"📄 {file_name}", tags="unchecked")
+                self.ui.tree.insert(item, "end", iid=file_path, text=f"\U0001F4C4 {file_name}", tags="unchecked")
 
         except PermissionError:
             messagebox.showwarning("Permission Denied", f"Cannot access {real_path}.")
