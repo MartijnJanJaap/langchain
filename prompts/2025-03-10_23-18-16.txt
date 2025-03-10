@@ -1,0 +1,1 @@
+Thethe view.html has the functionality i want to make in angular application i have. data-table.component is responsible for loading and displaying the csv file. Make that similarly to how the view.html does that. All code you need me to change, needs to be done thorugh python code.

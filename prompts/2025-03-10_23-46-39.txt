@@ -1,0 +1,1 @@
+I want to see the data table component in the main page. and nothing else. All code you need me to change, needs to be done thorugh python code.

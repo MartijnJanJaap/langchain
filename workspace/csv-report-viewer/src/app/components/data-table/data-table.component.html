@@ -1,14 +1,12 @@
-
-    <table>
-      <thead>
-        <tr>
-          <th *ngFor="let header of headers" (click)="sortTable(header)">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of data">
-          <td *ngFor="let cell of row">{{ cell }}</td>
-        </tr>
-      </tbody>
-    </table>
-    
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let header of headers" (click)="sortTable(header)">{{ header }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data">
+      <td *ngFor="let header of headers">{{ row[header] }}</td>
+    </tr>
+  </tbody>
+</table>
