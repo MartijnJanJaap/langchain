@@ -28,7 +28,7 @@ class StaticRulesUI:
     def create_static_rules_checkboxes(self):
         rules = get_static_rules().split("\n")
         for rule in rules:
-            var = tk.BooleanVar()
+            var = tk.BooleanVar(value=True)  # Set the default value to True
             chk = tk.Checkbutton(self.parent, text=rule, variable=var,
                                  bg=self.style['bg'], fg=self.style['fg'],
                                  selectcolor=self.style['selectcolor'], font=self.font_settings,

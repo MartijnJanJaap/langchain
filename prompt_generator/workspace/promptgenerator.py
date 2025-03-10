@@ -26,6 +26,7 @@ def generate_full_prompt(root_dir):
         static_rules_ui = StaticRulesUI(rules_frame)
 
         root.mainloop()
+        root.destroy()
     except Exception as e:
         print(f"[ERROR] Failed to initialize interface: {e}")
         return None
