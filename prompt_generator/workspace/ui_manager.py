@@ -24,6 +24,15 @@ class UIFileSelector:
         # Set the parent (root window's) background to black
         self.parent.configure(bg="#000000")
 
+        # Input section
+        ttk.Label(self.parent, text="Enter additional instructions:",
+                  font=("Arial", 12), foreground="white", background="#000000").pack(pady=5)
+
+        self.text_input = tk.Text(self.parent, height=4, width=80, bg="#333333", fg="white",
+                                  font=("Arial", 12), insertbackground="lime")
+        self.text_input.pack(pady=5, padx=20)
+
+        # Treeview section
         self.tree_frame = tk.Frame(self.parent, bg="#000000", padx=10, pady=10, relief=tk.RIDGE, borderwidth=2)
         self.tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
 
@@ -53,10 +62,3 @@ class UIFileSelector:
         self.tree.tag_configure("unchecked", background="#333333")
         self.tree.tag_configure("checked", background="#666666", foreground="#FFBF00")
         self.tree.bind("<ButtonRelease-1>", self.toggle_selection_callback)
-
-        ttk.Label(self.parent, text="Enter additional instructions:",
-                  font=("Arial", 12), foreground="white", background="#000000").pack(pady=5)
-
-        self.text_input = tk.Text(self.parent, height=4, width=80, bg="#333333", fg="white",
-                                  font=("Arial", 12), insertbackground="lime")
-        self.text_input.pack(pady=5, padx=20)
