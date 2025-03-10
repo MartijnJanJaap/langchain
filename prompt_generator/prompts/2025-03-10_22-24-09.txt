@@ -1,0 +1,1 @@
+make all static prompt rules by default selected

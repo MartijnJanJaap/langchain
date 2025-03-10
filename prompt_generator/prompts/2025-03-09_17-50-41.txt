@@ -1,0 +1,2 @@
+Iwe just implemented a new feature: look for a .gitignore file in the workspace. If there is one. use that to filter out files in 1) selection 2) folder tree and also filter out __pycache__
+however, this needs to happen in each folder in the workspace.

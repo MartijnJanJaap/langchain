@@ -1,0 +1,1 @@
+create a python script which has a list of static rules. call this file, static prompt rules. the rules need to be added as plaintext to the prompt. 1) Always return full files because the code you output is automatically copied.

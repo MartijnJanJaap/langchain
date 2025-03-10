@@ -3,13 +3,13 @@ from prompt_generator.workspace import promptgenerator
 
 
 def main():
-    full_prompt = promptgenerator.generate_full_prompt(
-        "C:\projects\portfoliomanager\\")
+    full_prompt = promptgenerator.generate_full_prompt("C:\projects\portfoliomanager\prompt_generator\\")
+
     if not full_prompt:
         print("No prompt generated.")
         return
 
-    config_list = autogen.config_list_from_json(env_or_file="OAI_CONFIG_LIST.json")
+    config_list = autogen.config_list_from_json(env_or_file="../OAI_CONFIG_LIST.json")
 
     assistant = autogen.AssistantAgent(
         name="Assistant",

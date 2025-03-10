@@ -1,0 +1,1 @@
+Extract all the view styling related stuff in new file(s).

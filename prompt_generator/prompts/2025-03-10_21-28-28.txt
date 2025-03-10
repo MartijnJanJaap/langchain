@@ -1,0 +1,1 @@
+I want static prompt rules to have some ui logic. because i want to have static prompt rules at the bottom of the screen and each rule i want as a checkbox to check if i want to use it or not.
