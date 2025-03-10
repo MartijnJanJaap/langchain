@@ -1,0 +1,1 @@
+static prompt rules is not being used in promptgenerator. use it there appropriately. always give full code.
