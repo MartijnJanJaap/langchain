@@ -1,0 +1,2 @@
+Generate a rest endpoint in python which can get all the files in reports/csv 
+One should be an endpoint and the other should be a service. Each method needs a seperate file/class. Each endpoint gets its own method/class/file.

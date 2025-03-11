@@ -1,0 +1,2 @@
+Generate a rest endpoint in python which can get all the files in reports/csv 
+One should be an endpoint and the other should be a service. Each method needs a seperate file/class. Each endpoint gets its own method/class/file. Controller layer goes into folder called app/api. Service layer goes into a folder called app/service I want to see that in the file path you provide. The file name should be the same as the method name.
