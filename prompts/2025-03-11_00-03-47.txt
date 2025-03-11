@@ -1,0 +1,1 @@
+data table component only shows dummy data, let it get the real csv result file and display it. All code you need me to change, needs to be done thorugh python code.

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CsvService } from '../../services/csv.service';
 
 @Component({
   selector: 'app-data-table',
@@ -12,16 +13,24 @@ export class DataTableComponent implements OnInit {
   headers: string[] = [];
   sortOrder: number = 1; // 1 for ascending, -1 for descending
 
+  constructor(private csvService: CsvService) {}
+
   ngOnInit() {
-    if (this.data.length > 0) {
-      // Initialize headers if data is available
-      this.headers = Object.keys(this.data[0]);
-    }
+    this.fetchDataFromCsv();
+  }
+
+  fetchDataFromCsv() {
+    this.csvService.fetchCsv('assets/reports/csv/2025-03-08.csv').subscribe(data => {
+      this.data = this.csvService.parseCsv(data);
+      if (this.data.length > 0) {
+        this.headers = Object.keys(this.data[0]);
+      }
+    });
   }
 
   sortTable(header: string) {
     const headerIndex = this.headers.indexOf(header);
-    if(headerIndex === -1) return;
+    if (headerIndex === -1) return;
 
     this.data.sort((a, b) => {
       const aValue = a[header];
@@ -33,7 +42,6 @@ export class DataTableComponent implements OnInit {
       if (aValue > bValue) {
         return 1 * this.sortOrder;
       }
-
       return 0;
     });
 
