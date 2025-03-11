@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CsvService } from '../../services/csv.service';
 import { CsvSelectorComponent } from '../csv-selector/csv-selector.component';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-data-table',
@@ -16,7 +17,10 @@ export class DataTableComponent implements OnInit {
 
   constructor(private csvService: CsvService) {}
 
+  csvFileSelected: string = '';
+
   ngOnInit() {
+    this.csvFileSelected = '';
     this.fetchDataFromCsv();
   }
 
@@ -41,7 +45,7 @@ export class DataTableComponent implements OnInit {
         return -1 * this.sortOrder;
       }
       if (aValue > bValue) {
-        return 1 * this.sortOrder;
+        return this.sortOrder;
       }
       return 0;
     });
@@ -49,3 +53,12 @@ export class DataTableComponent implements OnInit {
     this.sortOrder = -this.sortOrder; // Toggle sort order
   }
 }
+
+//   updateCsvData(fileName: string) {
+//     this.csvService.fetchCsv(\`assets/reports/csv/\${fileName}.csv\`).subscribe(data => {
+//       this.data = this.csvService.parseCsv(data);
+//       if (this.data.length > 0) {
+//         this.headers = Object.keys(this.data[0]);
+//       }
+//     });
+//   }

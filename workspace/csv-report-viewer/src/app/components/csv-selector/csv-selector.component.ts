@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { CsvService } from '../../services/csv.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-csv-selector',
@@ -15,12 +16,16 @@ export class CsvSelectorComponent implements OnInit {
   constructor(private csvService: CsvService) {}
 
   ngOnInit() {
+    console.log("sadsadad")
     this.csvService.fetchCsvFiles().subscribe(files => {
       this.csvFiles = files;
     });
   }
 
+  @Output() csvFileSelected: EventEmitter<string> = new EventEmitter<string>();
+
   onCsvFileSelect(fileName: string) {
-    // Perform further actions based on selected file
+    this.csvFileSelected.emit(fileName);
   }
+
 }

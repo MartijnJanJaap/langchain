@@ -1,0 +1,2 @@
+code should always be generated through python code. 
+data table should use csv selector and get the options for the dropdown through the service.

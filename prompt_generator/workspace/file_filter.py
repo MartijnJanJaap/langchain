@@ -13,7 +13,8 @@ class FileFilter:
             '.svn',
             '.vscode',
             'venv',
-            '.env'
+            '.env',
+            '.angular'
         ]
 
     def is_ignored(self, path):
