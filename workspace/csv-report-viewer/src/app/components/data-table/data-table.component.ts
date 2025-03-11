@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CsvService } from '../../services/csv.service';
+import { CsvSelectorComponent } from '../csv-selector/csv-selector.component';
 
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CsvSelectorComponent],
   templateUrl: './data-table.component.html'
 })
 export class DataTableComponent implements OnInit {

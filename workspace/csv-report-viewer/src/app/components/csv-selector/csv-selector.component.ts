@@ -1,15 +1,26 @@
 
-    import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatSelectModule } from '@angular/material/select';
+import { CsvService } from '../../services/csv.service';
 
-    @Component({
-      selector: 'app-csv-selector',
-      templateUrl: './csv-selector.component.html',
-    })
-    export class CsvSelectorComponent {
-      csvFiles = ['file1.csv', 'file2.csv']; // Example file names
+@Component({
+  selector: 'app-csv-selector',
+  standalone: true,
+  imports: [MatSelectModule],
+  templateUrl: './csv-selector.component.html'
+})
+export class CsvSelectorComponent implements OnInit {
+  csvFiles: string[] = [];
 
-      onFileSelected(fileName: string) {
-        // Action on file select
-      }
-    }
-    
+  constructor(private csvService: CsvService) {}
+
+  ngOnInit() {
+    this.csvService.fetchCsvFiles().subscribe(files => {
+      this.csvFiles = files;
+    });
+  }
+
+  onCsvFileSelect(fileName: string) {
+    // Perform further actions based on selected file
+  }
+}

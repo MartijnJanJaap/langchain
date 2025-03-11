@@ -1,6 +1,9 @@
 
-    <label for="fileSelect">Select CSV File:</label>
-    <select id="fileSelect" (change)="onFileSelected($event.target.value)">
-      <option *ngFor="let file of csvFiles" [value]="file">{{ file }}</option>
-    </select>
-    
+<mat-form-field appearance="fill">
+  <mat-label>Select CSV File</mat-label>
+  <mat-select (selectionChange)="onCsvFileSelect($event.value)">
+    <mat-option *ngFor="let file of csvFiles" [value]="file">
+      {{ file }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

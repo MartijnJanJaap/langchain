@@ -1,0 +1,1 @@
+I want the frontend to call the python endpoint to get all the files. It should fill in a dropdown/select. You can use angular material for the dropdown. In the angular service layer we should do the fetching. Write python code that can modify or override existing angular code. So all code goed through python code.
