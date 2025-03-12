@@ -1,0 +1,2 @@
+align the three buttons in the same horizontal line:
+generate prompt, auto select, cancel

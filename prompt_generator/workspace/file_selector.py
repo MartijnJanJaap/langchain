@@ -35,17 +35,13 @@ class FileSelector:
             self.toggle_selection
         )
 
-        # Move auto select button to a new frame underneath the text input
-        self.autoselect_frame = tk.Frame(self.parent, bg="#000000")
-        self.autoselect_frame.pack(fill=tk.X, padx=0, pady=0)
+        self.button_frame = tk.Frame(self.parent, bg="#000000")
+        self.button_frame.pack(fill=tk.X, padx=0, pady=10)
 
         self.auto_select_button = ttk.Button(
-            self.autoselect_frame, text="Auto Select",
+            self.button_frame, text="Auto Select",
             command=self.auto_select_files, style="Dark.TButton")
-        self.auto_select_button.pack(side=tk.TOP, expand=True, padx=0, pady=0)
-
-        self.button_frame = tk.Frame(self.parent, bg="#000000")
-        self.button_frame.pack(fill=tk.X, padx=20, pady=10)
+        self.auto_select_button.pack(side=tk.LEFT, expand=True, padx=5, pady=0)
 
         self.ok_button = ttk.Button(
             self.button_frame, text="Generate Prompt",
@@ -55,7 +51,7 @@ class FileSelector:
         self.cancel_button = ttk.Button(
             self.button_frame, text="Cancel",
             command=self.cancel_action, style="Dark.TButton")
-        self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
+        self.cancel_button.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
     def auto_select_files(self):
         # Define your selection criteria here
@@ -113,7 +109,7 @@ class FileSelector:
 
             for full_path, folder_name in subfolders:
                 folder_id = self.ui.tree.insert(item, "end", iid=full_path, text=f"\U0001F4C1 {folder_name}", open=False, tags="unchecked")
-                add_dummy_node(self.ui.tree, folder_id)
+                add_dummy_node(tree, folder_id)
 
             for file_path in files:
                 file_name = os.path.basename(file_path)
