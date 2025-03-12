@@ -1,0 +1,1 @@
+file selector should only deal with fileselection part of the prompt. prompt generator's responsibility should be to get last known prompt using the appropriate python file and and it should also save the prompt using the prompt_file_manager. Keep the imports in the same notation as currently is.

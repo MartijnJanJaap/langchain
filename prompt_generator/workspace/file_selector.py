@@ -1,9 +1,9 @@
+# filename: file_selector.py
 import os
 import tkinter as tk
 from tkinter import messagebox, ttk
 
 from prompt_generator.workspace.file_filter import FileFilter
-from prompt_generator.workspace.get_last_known_prompt import get_last_known_prompt
 from prompt_generator.workspace.ui_manager import UIFileSelector
 
 
@@ -33,10 +33,6 @@ class FileSelector:
             self.load_subdirectory,
             self.toggle_selection
         )
-
-        last_prompt = get_last_known_prompt(prompts_dir=root_dir+"prompts/")
-        if last_prompt:
-            self.ui.text_input.insert("1.0", last_prompt)
 
         self.button_frame = tk.Frame(self.parent, bg="#000000")
         self.button_frame.pack(fill=tk.X, padx=20, pady=10)

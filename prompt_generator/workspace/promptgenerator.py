@@ -6,6 +6,7 @@ from prompt_generator.workspace.static_prompt_rules import StaticRulesUI
 from prompt_generator.workspace.file_structure_generator import FileStructureGenerator
 from prompt_generator.workspace.prompt_file_manager import save_user_input
 from prompt_generator.workspace.read_file_content import read_file_content
+from prompt_generator.workspace.get_last_known_prompt import get_last_known_prompt
 
 def generate_full_prompt(root_dir):
     workspace_dir = root_dir + "/workspace/"
@@ -19,6 +20,11 @@ def generate_full_prompt(root_dir):
         selector_frame = tk.Frame(root, bg="#000000")
         selector_frame.pack(fill=tk.BOTH, expand=True)
         selector = FileSelector(selector_frame, root_dir)
+
+        # Retrieve the last known prompt
+        last_prompt = get_last_known_prompt(prompts_dir)
+        if last_prompt:
+            selector.ui.text_input.insert("1.0", last_prompt)
 
         # Initialize StaticRulesUI at the bottom
         rules_frame = tk.Frame(root, bg="#000000", padx=10, pady=10)
