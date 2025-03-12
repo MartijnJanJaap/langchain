@@ -1,72 +1,29 @@
 # filename: update_ts_files.py
 
-import os
-
-def update_data_table_ts(file_path):
-    updated_content = ""
+def update_csv_selector_ts_file():
+    # Path to the `csv-selector.component.ts` file
+    file_path = "C:\\projects\\portfoliomanager\\workspace\\csv-report-viewer\\src\\app\\components\\csv-selector\\csv-selector.component.ts"
+    
+    # Read the original file
     with open(file_path, 'r') as file:
-        content = file.readlines()
-        updated_content = "".join(content)
+        lines = file.readlines()
 
-    replace_import = "import { CsvSelectorComponent } from '../csv-selector/csv-selector.component';"
-    updated_import = "import { CsvSelectorComponent } from '../csv-selector/csv-selector.component';\nimport { Output, EventEmitter } from '@angular/core';"
-    
-    replace_on_init = "ngOnInit() {"
-    add_csv_listener = "  csvFileSelected: string = '';\n"
-    updated_on_init = f"ngOnInit() {{\n    this.csvFileSelected = this.csvService.fetchCsvFiles() || '';\n"
+    # New content with additional console logs
+    new_content = []
+    for line in lines:
+        if "ngOnInit()" in line:  # After ngOnInit definition, add console logs to verify data
+            new_content.append(line)
+            new_content.append('    console.log("Fetching CSV files...");\n')
+        elif "this.csvFiles = files;" in line:  # Add logs to check if files are being fetched
+            new_content.append("      console.log('Fetched files:', files);\n")
+            new_content.append(line)
+        else:
+            new_content.append(line)
 
-    replace_fetch = "fetchDataFromCsv();"
-    updated_fetch = """
-  updateCsvData(fileName: string) {
-    this.csvService.fetchCsv(\`assets/reports/csv/\${fileName}.csv\`).subscribe(data => {
-      this.data = this.csvService.parseCsv(data);
-      if (this.data.length > 0) {
-        this.headers = Object.keys(this.data[0]);
-      }
-    });
-  }
-  """
-
-    if replace_import in updated_content:
-        updated_content = updated_content.replace(replace_import, updated_import)
-    
-    if replace_on_init in updated_content:
-        updated_content = updated_content.replace(replace_on_init, f"{add_csv_listener}{updated_on_init}")
-
+    # Write back the updated file
     with open(file_path, 'w') as file:
-        file.write(updated_content + updated_fetch)
-
-def update_csv_selector_ts(file_path):
-    updated_content = ""
-    with open(file_path, 'r') as file:
-        content = file.readlines()
-        updated_content = "".join(content)
-
-    replace_import = "import { CsvService } from '../../services/csv.service';"
-    updated_import = "import { CsvService } from '../../services/csv.service';\nimport { Output, EventEmitter } from '@angular/core';"
+        file.writelines(new_content)
     
-    replace_on_file_select = "// Perform further actions based on selected file"
-    updated_on_file_select = """
-  @Output() csvFileSelected: EventEmitter<string> = new EventEmitter<string>();
+    print("Updated csv-selector.component.ts with additional logging to debug data loading.")
 
-  onCsvFileSelect(fileName: string) {
-    this.csvFileSelected.emit(fileName);
-  }
-    """
-    if replace_import in updated_content:
-        updated_content = updated_content.replace(replace_import, updated_import)
-    
-    if replace_on_file_select in updated_content:
-        updated_content = updated_content.replace(replace_on_file_select, updated_on_file_select)
-
-    with open(file_path, 'w') as file:
-        file.write(updated_content)
-
-# Paths for the files
-data_table_ts_path = r"C:\projects\portfoliomanager\workspace\csv-report-viewer\src\app\components\data-table\data-table.component.ts"
-csv_selector_ts_path = r"C:\projects\portfoliomanager\workspace\csv-report-viewer\src\app\components\csv-selector\csv-selector.component.ts"
-
-update_data_table_ts(data_table_ts_path)
-update_csv_selector_ts(csv_selector_ts_path)
-
-print("TypeScript files successfully updated! Please verify the changes in the Angular application.")
+update_csv_selector_ts_file()

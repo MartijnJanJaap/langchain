@@ -1,0 +1,2 @@
+code should always be generated through python code. 
+when i press on the csv selector no data is visable. Even tough the data is loaded successfully. It is just not properly displayed.
