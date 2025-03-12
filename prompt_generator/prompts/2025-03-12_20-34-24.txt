@@ -1,0 +1,1 @@
+call the method select files programatically through a button on the screen which is in between the prompt and the file selector. The button has the text "Auto select"

@@ -1,4 +1,5 @@
 # filename: file_selector.py
+
 import os
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -34,6 +35,15 @@ class FileSelector:
             self.toggle_selection
         )
 
+        # Move auto select button to a new frame underneath the text input
+        self.autoselect_frame = tk.Frame(self.parent, bg="#000000")
+        self.autoselect_frame.pack(fill=tk.X, padx=0, pady=0)
+
+        self.auto_select_button = ttk.Button(
+            self.autoselect_frame, text="Auto Select",
+            command=self.auto_select_files, style="Dark.TButton")
+        self.auto_select_button.pack(side=tk.TOP, expand=True, padx=0, pady=0)
+
         self.button_frame = tk.Frame(self.parent, bg="#000000")
         self.button_frame.pack(fill=tk.X, padx=20, pady=10)
 
@@ -47,6 +57,19 @@ class FileSelector:
             command=self.cancel_action, style="Dark.TButton")
         self.cancel_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=5)
 
+    def auto_select_files(self):
+        # Define your selection criteria here
+        files_to_select = [
+            os.path.join(self.workspace_dir, "file_filter.py"),
+            os.path.join(self.workspace_dir, "file_selector.py")
+        ]
+
+        print("Attempting to auto-select files:")
+        self.select_files_programmatically(files_to_select)
+
+        # Force update of the UI
+        self.ui.tree.update_idletasks()
+
     def cancel_action(self):
         self.selected_files.clear()
         self.user_input = ""
@@ -57,6 +80,7 @@ class FileSelector:
             entries = sorted(os.listdir(self.workspace_dir))
             for entry in entries:
                 full_path = os.path.join(self.workspace_dir, entry)
+                print(f"Inserting tree item: {full_path}")
                 if self.filter.is_ignored(full_path):
                     continue
                 if os.path.isdir(full_path):
@@ -115,3 +139,15 @@ class FileSelector:
     def generate_prompt(self):
         self.user_input = self.ui.text_input.get("1.0", tk.END).strip()
         self.parent.quit()
+
+    def select_files_programmatically(self, file_list):
+        """Selects files programmatically without manual interaction."""
+        all_items = self.ui.tree.get_children()
+        for file_path in file_list:
+            print(f"Checking file for selection: {file_path} among {all_items}")
+            if file_path in all_items:
+                print(f"Selecting file: {file_path}")
+                self.ui.tree.item(file_path, tags="checked")
+                self.selected_files.add(file_path)
+            else:
+                print(f"File {file_path} not found among tree items.")
