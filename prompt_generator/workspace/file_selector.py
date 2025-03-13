@@ -109,7 +109,7 @@ class FileSelector:
 
             for full_path, folder_name in subfolders:
                 folder_id = self.ui.tree.insert(item, "end", iid=full_path, text=f"\U0001F4C1 {folder_name}", open=False, tags="unchecked")
-                add_dummy_node(tree, folder_id)
+                add_dummy_node(self.ui.tree, folder_id)
 
             for file_path in files:
                 file_name = os.path.basename(file_path)
