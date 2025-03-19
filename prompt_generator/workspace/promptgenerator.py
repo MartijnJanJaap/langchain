@@ -4,7 +4,7 @@ import tkinter as tk
 from prompt_generator.workspace.file_selector import FileSelector
 from prompt_generator.workspace.static_prompt_rules import StaticRulesUI
 from prompt_generator.workspace.file_structure_generator import FileStructureGenerator
-from prompt_generator.workspace.prompt_file_manager import save_user_input
+from prompt_generator.workspace.save_prompt_input import save_user_input
 from prompt_generator.workspace.read_file_content import read_file_content
 from prompt_generator.workspace.get_last_known_prompt import get_last_known_prompt
 

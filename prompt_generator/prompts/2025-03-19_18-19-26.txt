@@ -1,0 +1,20 @@
+when someone presses the button auto select. I want to send the file structure and the prompt to openai. together with the following text: Give me the absolute paths to the files you think are related to be involved with the prompt. Just give me the list withouth any text
+
+In a new file/class I want to call open ai's cheapest model using this api key SOMEKEY
+
+the response of openai needs to by parsed and the method should return a list of strings
+
+example code: 
+from openai import OpenAI
+
+client = OpenAI(
+    # defaults to os.environ.get("OPENAI_API_KEY")
+    api_key="private",
+)
+
+def chat_gpt(prompt):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response.choices[0].message.content.strip()

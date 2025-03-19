@@ -9,3 +9,6 @@ With the following config:
   }
 ]
 ````
+
+pip install autogen
+pip install ag2[openai]
