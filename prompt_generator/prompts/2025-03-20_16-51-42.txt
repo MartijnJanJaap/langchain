@@ -1,0 +1,6 @@
+this method is broken:     def select_files_programmatically(self, file_list):
+children in workspace folder itself are not iterated in for child in children
+I think that it needs to process seperately like if its else statement here it needs to be selected:
+
+            if os.path.isdir(node):
+                self.load_subdirectory(node)

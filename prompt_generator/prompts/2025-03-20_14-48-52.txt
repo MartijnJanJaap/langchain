@@ -1,0 +1,4 @@
+auto select doesnt seem to be working
+I get this error:
+
+Some files were not found for selection: ['C:\\projects\\git\\portfoliomanager\\prompt_generator\\workspace\\auto_select_files_based_on_prompt.py', 'C:\\projects\\git\\portfoliomanager\\prompt_generator\\workspace\\get_last_known_prompt.py', 'C:\\projects\\git\\portfoliomanager\\prompt_generator\\workspace\\save_prompt_input.py']

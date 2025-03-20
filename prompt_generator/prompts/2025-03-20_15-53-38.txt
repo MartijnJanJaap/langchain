@@ -1,0 +1,1 @@
+select_files_programmatically goes wrong i tink because there are checks with children and filepaths are going wrong
