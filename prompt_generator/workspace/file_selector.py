@@ -7,7 +7,6 @@ from tkinter import messagebox, ttk
 from prompt_generator.workspace.file_filter import FileFilter
 from prompt_generator.workspace.ui_manager import UIFileSelector
 
-
 def remove_dummy_node(tree, node):
     for child in tree.get_children(node):
         if tree.item(child, "text") == "Loading...":
@@ -18,6 +17,9 @@ def add_dummy_node(tree, node):
     """Add a dummy node to indicate that a folder has subfolders."""
     tree.insert(node, "end", iid=f"{node}_dummy", text="Loading...")
 
+
+# Import the class for using OpenAI's functionality
+from prompt_generator.workspace.auto_select_files_based_on_prompt import OpenAIIntegration
 
 class FileSelector:
     def __init__(self, parent, root_dir):
@@ -54,15 +56,17 @@ class FileSelector:
         self.cancel_button.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
     def auto_select_files(self):
-        # Define your selection criteria here
-        files_to_select = [
-            os.path.join(self.workspace_dir, "file_filter.py"),
-            os.path.join(self.workspace_dir, "file_selector.py")
-        ]
+        # Obtain a list of relevant files using OpenAIIntegration
+        root_dir = self.workspace_dir
+        openai_integration = OpenAIIntegration()
+        relevant_files = openai_integration.get_files_which_are_related_to_prompt(self.user_input, root_dir)
 
-        print("Attempting to auto-select files:")
-        self.select_files_programmatically(files_to_select)
-
+        if relevant_files:
+            print("Attempting to auto-select files based on AI prompt analysis:")
+            self.select_files_programmatically(relevant_files)
+        else:
+            print("No files were selected by AI prompt analysis.")
+        
         # Force update of the UI
         self.ui.tree.update_idletasks()
 

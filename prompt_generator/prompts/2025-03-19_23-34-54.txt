@@ -1,0 +1,2 @@
+i created auto_select_files_based_on_prompt.py
+I want to use it in the right place in file_selector.py so when i press auto select, that it automatically selects.

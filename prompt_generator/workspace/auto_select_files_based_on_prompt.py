@@ -23,8 +23,8 @@ class OpenAIIntegration:
             prompt += (
                 "Above are the file structure and prompt.\n"
 
-                "Based on the provided file structure, please list the absolute file paths you believe are most relevant. which file need a change? the fever the better."
-                "in relation to interacting with the prompt described. Only provide the list of paths without explanatory text. only select giles if you are 100 percent sure the need a change max 3."
+                "Based on the provided file structure, please list the file paths, everything after workspace, you believe are most relevant. which file need a change? the fever the better."
+                "in relation to interacting with the prompt described. Only provide the list of paths without explanatory text. only select files if you are 100 percent sure the need a change max 3."
             )
 
             response = client.chat.completions.create(
@@ -36,7 +36,6 @@ class OpenAIIntegration:
 
             # Remove any leading characters such as '- ' from each line
             cleaned_paths = [path.lstrip("- ").strip() for path in path_lines]
-
             # Convert relative paths to absolute paths
             absolute_paths = [os.path.join(root_dir, path.strip('/')) for path in cleaned_paths]
             return absolute_paths
