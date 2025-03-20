@@ -1,0 +1,4 @@
+relevant_files = openai_integration.get_files_which_are_related_to_prompt(self.user_input, root_dir)
+
+
+Self.user_input does not give user input

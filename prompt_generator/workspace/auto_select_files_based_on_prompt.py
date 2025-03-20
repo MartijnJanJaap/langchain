@@ -12,6 +12,9 @@ class OpenAIIntegration:
     @staticmethod
     def get_files_which_are_related_to_prompt(prompt, root_dir):
         try:
+
+            print("\n\n this is the prompt: {}".format(prompt))
+
             config_path = os.path.abspath(os.path.join(__file__, "../../../OAI_CONFIG_LIST.json"))
             api_key = get_api_key_from_config(config_path)
             client = OpenAI(api_key=api_key)
@@ -21,10 +24,10 @@ class OpenAIIntegration:
             prompt += " " + file_structure
 
             prompt += (
-                "Above are the file structure and prompt.\n"
+                "\nAbove are the file structure and prompt.\n"
 
-                "Based on the provided file structure, please list the file paths, everything after workspace, you believe are most relevant. which file need a change? the fever the better."
-                "in relation to interacting with the prompt described. Only provide the list of paths without explanatory text. only select files if you are 100 percent sure the need a change max 3."
+                "Based on the provided file structure, please list the file paths, everything after /workspace, you believe are most relevant. which file need a change? the fever the better."
+                "in relation to interacting with the prompt described. Only provide the list of paths without explanatory text. max 3."
             )
 
             response = client.chat.completions.create(

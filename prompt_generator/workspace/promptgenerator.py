@@ -67,7 +67,7 @@ def generate_full_prompt(root_dir):
     return prompt
 
 def main():
-    generate_full_prompt(r"C:\projects\portfoliomanager\prompt_generator\\")
+    generate_full_prompt("../")
 
 if __name__ == "__main__":
     main()

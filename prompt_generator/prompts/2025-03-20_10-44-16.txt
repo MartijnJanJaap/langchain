@@ -1,0 +1,18 @@
+It does not autoselect/collapse open a file in another folder. e.g. test/test.py. I need test/test.py.
+
+I get this error:
+
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\manis\AppData\Local\Programs\Python\Python312\Lib\tkinter\__init__.py", line 1968, in __call__
+    return self.func(*args)
+           ^^^^^^^^^^^^^^^^
+  File "C:\projects\git\portfoliomanager\prompt_generator\workspace\file_selector.py", line 60, in auto_select_files
+    self.select_files_programmatically(relevant_files)
+  File "C:\projects\git\portfoliomanager\prompt_generator\workspace\file_selector.py", line 154, in select_files_programmatically
+    expanded_path = expand_path(resolved_path)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\projects\git\portfoliomanager\prompt_generator\workspace\file_selector.py", line 141, in expand_path
+    current_path = self.ui.tree.root
+                   ^^^^^^^^^^^^^^^^^
+AttributeError: 'Treeview' object has no attribute 'root'. Did you mean: '_root'?

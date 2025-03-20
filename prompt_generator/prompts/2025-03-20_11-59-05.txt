@@ -1,0 +1,1 @@
+It does not autoselect/collapse open a file in another folder. e.g. test/test.py. I need test/test.py.

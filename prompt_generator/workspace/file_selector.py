@@ -7,6 +7,9 @@ from tkinter import messagebox, ttk
 from prompt_generator.workspace.file_filter import FileFilter
 from prompt_generator.workspace.ui_manager import UIFileSelector
 
+# Import the class for using OpenAI's functionality
+from prompt_generator.workspace.auto_select_files_based_on_prompt import OpenAIIntegration
+
 def remove_dummy_node(tree, node):
     for child in tree.get_children(node):
         if tree.item(child, "text") == "Loading...":
@@ -17,9 +20,6 @@ def add_dummy_node(tree, node):
     """Add a dummy node to indicate that a folder has subfolders."""
     tree.insert(node, "end", iid=f"{node}_dummy", text="Loading...")
 
-
-# Import the class for using OpenAI's functionality
-from prompt_generator.workspace.auto_select_files_based_on_prompt import OpenAIIntegration
 
 class FileSelector:
     def __init__(self, parent, root_dir):
@@ -57,6 +57,7 @@ class FileSelector:
 
     def auto_select_files(self):
         # Obtain a list of relevant files using OpenAIIntegration
+        self.user_input = self.ui.text_input.get("1.0", tk.END).strip()
         root_dir = self.workspace_dir
         openai_integration = OpenAIIntegration()
         relevant_files = openai_integration.get_files_which_are_related_to_prompt(self.user_input, root_dir)
@@ -142,12 +143,30 @@ class FileSelector:
 
     def select_files_programmatically(self, file_list):
         """Selects files programmatically without manual interaction."""
+        def traverse_and_select(node):
+            # Load subdirectory if it's a folder and contains 'Loading...' children
+            if self.ui.tree.tag_has("unchecked", node):
+                remove_dummy_node(self.ui.tree, node)
+                self.load_subdirectory()
+
+            children = self.ui.tree.get_children(node)
+            for child in children:
+                full_path = child  # Use the node identifier as the full path
+
+                if full_path in file_list:
+                    print(f"Selecting file: {full_path}")
+                    self.ui.tree.item(child, tags="checked")
+                    self.selected_files.add(full_path)
+                    file_list.remove(full_path)  # Remove selected file from list
+
+                # Recursively check subdirectories
+                if os.path.isdir(full_path):
+                    traverse_and_select(child)
+
+        # Start traversing from the root directory
         all_items = self.ui.tree.get_children()
-        for file_path in file_list:
-            print(f"Checking file for selection: {file_path} among {all_items}")
-            if file_path in all_items:
-                print(f"Selecting file: {file_path}")
-                self.ui.tree.item(file_path, tags="checked")
-                self.selected_files.add(file_path)
-            else:
-                print(f"File {file_path} not found among tree items.")
+        for root_item in all_items:
+            traverse_and_select(root_item)
+
+        if file_list:
+            print(f"Some files were not found for selection: {file_list}")

@@ -4,7 +4,7 @@ from prompt_generator.workspace import promptgenerator
 
 def main():
     full_prompt = promptgenerator.generate_full_prompt(
-        "C:\projects\portfoliomanager\\")
+        "./")
     if not full_prompt:
         print("No prompt generated.")
         return
