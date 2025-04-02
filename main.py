@@ -1,29 +1,42 @@
-import autogen
-from prompt_generator.workspace import promptgenerator
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain.chains.combine_documents import create_stuff_documents_chain
 
+from load_api_key_from_file import load_api_key_from_file
 
 def main():
-    full_prompt = promptgenerator.generate_full_prompt(
-        "./")
-    if not full_prompt:
-        print("No prompt generated.")
-        return
+    api_key = load_api_key_from_file()
+    print(api_key)
+    llm = ChatOpenAI(api_key=api_key)
 
-    config_list = autogen.config_list_from_json(env_or_file="OAI_CONFIG_LIST.json")
+    loader = WebBaseLoader("https://docs.smith.langchain.com/user_guide")
+    docs = loader.load()
 
-    assistant = autogen.AssistantAgent(
-        name="Assistant",
-        llm_config={"config_list": config_list}
-    )
+    text_splitter = RecursiveCharacterTextSplitter()
+    documents = text_splitter.split_documents(docs)
 
-    user_proxy = autogen.UserProxyAgent(
-        name="user",
-        human_input_mode="TERMINATE",
-        code_execution_config={"work_dir": "workspace", "use_docker": False},
-        max_consecutive_auto_reply=1
-    )
+    embeddings = OpenAIEmbeddings()
+    vector = FAISS.from_documents(documents, embeddings)
 
-    user_proxy.initiate_chat(assistant, message=full_prompt)
+    context_prompt = ChatPromptTemplate.from_template("""Answer the following question based only on the provided context:
+    <context>{context}</context>
+    Question: {input}""")
+
+    document_chain = create_stuff_documents_chain(llm, context_prompt)
+
+    question = "how can langsmith help with testing?"
+    relevant_docs = vector.similarity_search(question, k=4)
+
+    response = document_chain.invoke({
+        "input": question,
+        "context": relevant_docs
+    })
+
+    print(response)
 
 if __name__ == "__main__":
     main()
