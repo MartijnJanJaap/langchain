@@ -1,42 +1,56 @@
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.document_loaders import WebBaseLoader
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain.chains.combine_documents import create_stuff_documents_chain
+from typing import TypedDict, Literal
+import random
+from PIL import Image
+from io import BytesIO
+
+from langgraph.constants import END, START
+from langgraph.graph import StateGraph
 
 from load_api_key_from_file import load_api_key_from_file
 
 def main():
     api_key = load_api_key_from_file()
-    print(api_key)
-    llm = ChatOpenAI(api_key=api_key)
 
-    loader = WebBaseLoader("https://docs.smith.langchain.com/user_guide")
-    docs = loader.load()
 
-    text_splitter = RecursiveCharacterTextSplitter()
-    documents = text_splitter.split_documents(docs)
+class State(TypedDict):
+    graph_state: str
 
-    embeddings = OpenAIEmbeddings()
-    vector = FAISS.from_documents(documents, embeddings)
+def node_1(state):
+    print(" node 1 ")
+    return {"graph_state": state["graph_state"] + " I am"}
 
-    context_prompt = ChatPromptTemplate.from_template("""Answer the following question based only on the provided context:
-    <context>{context}</context>
-    Question: {input}""")
+def node_2(state):
+    print(" node 2 ")
+    return {"graph_state": state["graph_state"] + " happy!"}
 
-    document_chain = create_stuff_documents_chain(llm, context_prompt)
+def node_3(state):
+    print(" node 3 ")
+    return {"graph_state": state["graph_state"] + " sad."}
 
-    question = "how can langsmith help with testing?"
-    relevant_docs = vector.similarity_search(question, k=4)
+def decide_mood(state) -> Literal["node_2", "node_3"]:
 
-    response = document_chain.invoke({
-        "input": question,
-        "context": relevant_docs
-    })
+    user_input = state["graph_state"]
+    if random.random() < 0.5:
+        return "node_2"
+    return "node_3"
 
-    print(response)
+builder = StateGraph(State)
+builder.add_node("node_1", node_1)
+builder.add_node("node_2", node_2)
+builder.add_node("node_3", node_3)
+builder.add_edge(START, "node_1")
+builder.add_conditional_edges("node_1", decide_mood)
+builder.add_edge("node_2", END)
+builder.add_edge("node_3", END)
+
+graph = builder.compile()
+
+img_data = graph.get_graph().draw_mermaid_png()
+img = Image.open(BytesIO(img_data))
+img.show()
+
+final_state = graph.invoke({"graph_state": "Hi, this is martijn"})
+print(final_state)
 
 if __name__ == "__main__":
     main()
