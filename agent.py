@@ -1,12 +1,11 @@
 import os
+import re
 import subprocess
 from typing import TypedDict, Annotated
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
 
 from load_api_key_from_file import load_api_key_from_file
-
-# LLM setup
 
 api_key = load_api_key_from_file()
 llm = ChatOpenAI(model="gpt-4", temperature=0, api_key=api_key)
@@ -36,18 +35,22 @@ def task_input_node(state: CodeState) -> CodeState:
 
 # 2. Code generation node
 def code_gen_node(state: CodeState) -> CodeState:
-    prompt = f"Schrijf Python-code voor de volgende taak:\n{state['task']}\n\n{state['context']}"
+    prompt = f"Schrijf alleen de uitvoerbare Python-code voor de volgende taak:\n{state['task']}\n\n{state['context']}"
     response = llm.invoke(prompt)
     return {
         **state,
         "code": response.content
     }
 
-# 3. Save code node
+# 3. Save code node (extracts code blocks if needed)
 def code_save_node(state: CodeState) -> CodeState:
+    code = state["code"]
+    match = re.search(r"```(?:python)?\n(.*?)```", code, re.DOTALL)
+    clean_code = match.group(1).strip() if match else code.strip()
+
     filename = os.path.join(WORKDIR, "code.py")
     with open(filename, "w", encoding="utf-8") as f:
-        f.write(state["code"])
+        f.write(clean_code)
     return {
         **state,
         "code_path": filename
@@ -89,7 +92,7 @@ def retry_node(state: CodeState) -> CodeState:
     return {
         **state,
         "attempt": state["attempt"] + 1,
-        "context": f"De vorige code gaf deze fout:\n{state['error']}\nProbeer opnieuw."
+        "context": f"De vorige code gaf deze fout:\n{state['error']}\nProbeer opnieuw. Geef alleen uitvoerbare Python-code terug."
     }
 
 # 7. Abort node
