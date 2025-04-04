@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 
 from langgraph.constants import END, START
-from langgraph.graph import StateGraph
+from langgraph.graph import StateGraph, MessagesState
 
 from load_api_key_from_file import load_api_key_from_file
 
@@ -88,3 +88,25 @@ def multiply(a: int, b: int) -> int:
 llm_with_tools = llm.bind_tools([multiply])
 tool_call = llm_with_tools.invoke([HumanMessage(content = f" what is 3 multiplied by 20 ", name="Martijn")])
 print(tool_call)
+
+######################################
+
+class State(MessagesState):
+    pass
+
+
+def tool_calling_llm(state: MessagesState):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+builder = StateGraph(MessagesState)
+builder.add_node("tool_calling_llm", tool_calling_llm)
+builder.add_edge(START, "tool_calling_llm")
+builder.add_edge("tool_calling_llm", END)
+graph = builder.compile()
+
+img_data = graph.get_graph().draw_mermaid_png()
+img = Image.open(BytesIO(img_data))
+img.show()
+
+final_state = graph.invoke({"graph_state": "Hi, this is martijn"})
+print(final_state)
