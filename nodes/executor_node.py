@@ -1,6 +1,8 @@
 import subprocess
 import sys
 from config import AppConfig
+from nodes.TaskState import TaskState, Message
+from pydantic import ValidationError
 
 class ExecutorNode:
     def __init__(self, config: AppConfig, entry_file="main.py"):
@@ -8,14 +10,19 @@ class ExecutorNode:
         self.entry_file = entry_file
 
     def __call__(self, state):
+        print(str(state))
+        try:
+            task_state = TaskState.model_validate(state)
+        except ValidationError as e:
+            print("Invalid state in ExecutorNode:", e)
+            raise
+
         workspace = self.config.workspace_path
         entry_path = workspace / self.entry_file
 
         if not entry_path.exists():
-            return {
-                **state,
-                "error": f"Cannot find {self.entry_file} in {workspace}"
-            }
+            task_state.error = f"Cannot find {self.entry_file} in {workspace}"
+            return task_state.model_dump()
 
         try:
             result = subprocess.run(
@@ -27,28 +34,19 @@ class ExecutorNode:
                 cwd=str(workspace)
             )
             output = result.stdout.strip()
-            error = result.stderr.strip()
-            success = result.returncode == 0 and not error
+            error_output = result.stderr.strip()
+            success = result.returncode == 0 and not error_output
 
-            messages = state.get("messages", [])
-            messages.append({
-                "role": "executor",
-                "content": output if success else error
-            })
+            task_state.messages.append(
+                Message(role="executor", content=output if success else error_output)
+            )
+            task_state.error = None if success else error_output
 
-            return {
-                **state,
-                "messages": messages,
-                "error": None if success else error
-            }
+            return task_state.model_dump()
 
         except subprocess.TimeoutExpired as e:
-            error = f"Timeout while running {self.entry_file}: {str(e)}"
-            messages = state.get("messages", [])
-            messages.append({"role": "executor", "content": error})
+            error_msg = f"Timeout while running {self.entry_file}: {str(e)}"
+            task_state.messages.append(Message(role="executor", content=error_msg))
+            task_state.error = error_msg
 
-            return {
-                **state,
-                "messages": messages,
-                "error": error
-            }
+            return task_state.model_dump()

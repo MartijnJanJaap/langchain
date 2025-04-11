@@ -1,5 +1,7 @@
 import openai
 from config import AppConfig
+from nodes.TaskState import TaskState, Message
+from pydantic import ValidationError
 
 class SelfReflectionNode:
     def __init__(self, config: AppConfig):
@@ -11,15 +13,26 @@ class SelfReflectionNode:
         self.model = config.llm_model
 
     def __call__(self, state):
-        error = state.get("error")
-        if not error:
+        print(str(state))
+        try:
+            task_state = TaskState.model_validate(state)
+        except ValidationError as e:
+            print("Invalid state in SelfReflectionNode:", e)
+            raise
+
+        if not task_state.error:
             return state
 
-        user_prompt = state["messages"][0]["content"]
-        file_structure = state["file_structure"]
+        # Zoek eerste user-prompt in messages
+        user_prompt = next(
+            (m.content for m in task_state.messages if m.role == "user"),
+            "<no user prompt found>"
+        )
+
+        file_structure = task_state.file_structure
 
         reflection_prompt = (
-            f"The previous attempt to run the code resulted in an error:\n{error}\n\n"
+            f"The previous attempt to run the code resulted in an error:\n{task_state.error}\n\n"
             f"User prompt:\n{user_prompt}\n\n"
             f"Current project structure:\n{file_structure}\n\n"
             f"Please correct the code and return an updated list of files with their contents."
@@ -37,11 +50,7 @@ class SelfReflectionNode:
         )
 
         content = response.choices[0].message.content
-        messages_log = state.get("messages", [])
-        messages_log.append({"role": "reviser", "content": content})
+        task_state.messages.append(Message(role="reviser", content=content))
+        task_state.error = None
 
-        return {
-            **state,
-            "messages": messages_log,
-            "error": None
-        }
+        return task_state.model_dump()

@@ -1,6 +1,8 @@
 import openai
 from pathlib import Path
 from config import AppConfig
+from nodes.TaskState import TaskState, Message
+from pydantic import ValidationError
 
 class CodeGeneratorNode:
     def __init__(self, config: AppConfig):
@@ -12,15 +14,28 @@ class CodeGeneratorNode:
         self.model = config.llm_model
 
     def __call__(self, state):
+        try:
+            print(str(state))
+            task_state = TaskState.model_validate(state)
+        except ValidationError as e:
+            print("Invalid state:", e)
+            raise
+
+        last_user_message = next(
+            (m.content for m in reversed(task_state.messages) if m.role == "user"), ""
+        )
+        if not last_user_message:
+            raise ValueError("No user message found in state.")
+
+        file_structure = task_state.file_structure
+
         system_prompt = (
             "You are a programming assistant. Use the user's prompt and project structure below "
             "to generate code. Output a list of absolute file paths and their contents in the format:\n\n"
             "/absolute/path/to/file.py\n```python\n...code...\n```"
         )
 
-        user_prompt = state["messages"][-1]["content"]
-        file_structure = state["file_structure"]
-        prompt = f"User prompt:\n{user_prompt}\n\nProject structure:\n{file_structure}\n"
+        prompt = f"User prompt:\n{last_user_message}\n\nProject structure:\n{file_structure}\n"
 
         messages = [
             {"role": "system", "content": system_prompt},
@@ -34,16 +49,12 @@ class CodeGeneratorNode:
         )
 
         content = response.choices[0].message.content
-        generated_files = self.parse_files_from_response(content, self.config.workspace_path)
+        self.parse_files_from_response(content, self.config.workspace_path)
 
-        messages_log = state.get("messages", [])
-        messages_log.append({"role": "programmer", "content": content})
+        task_state.messages.append(Message(role="programmer", content=content))
+        task_state.error = None
 
-        return {
-            **state,
-            "messages": messages_log,
-            "error": None
-        }
+        return task_state.model_dump()
 
     def parse_files_from_response(self, text, base_path):
         lines = text.splitlines()
