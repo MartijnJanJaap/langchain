@@ -90,7 +90,7 @@ class CodeGeneratorNode:
             files[current_path] = "\n".join(buffer).strip("`\n")
 
         for path, content in files.items():
-            full_path = base_path / path.relative_to("/")
+            full_path = path.relative_to("/")
             full_path.parent.mkdir(parents=True, exist_ok=True)
             full_path.write_text(content)
 
