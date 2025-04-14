@@ -4,6 +4,7 @@ from pydantic import ValidationError
 from nodes.TaskState import TaskState, Message
 from nodes.file_structure_generator import FileStructureGenerator
 from config import AppConfig
+from nodes.state_logger import StateLogger
 
 
 class UserProxyNode:
@@ -11,11 +12,12 @@ class UserProxyNode:
         self.config = config
 
     def __call__(self, state):
-        print(str(state))
+        StateLogger.log_state(state, "UserProxyNode")
+
         try:
             task_state = TaskState.model_validate(state)
         except ValidationError as e:
-            print("Invalid state:" + str(state), e)
+            StateLogger.log_msg("Invalid state", "UserProxyNode")
             raise
 
         prompt_text = self.get_user_input()

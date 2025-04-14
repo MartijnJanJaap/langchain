@@ -1,37 +1,57 @@
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
+
 from config import AppConfig
 from nodes.TaskState import TaskState, Message
 from pydantic import ValidationError
+from nodes.state_logger import StateLogger
+import re
 
 class ExecutorNode:
-    def __init__(self, config: AppConfig, entry_file="main.py"):
+    def __init__(self, config: AppConfig):
         self.config = config
-        self.entry_file = entry_file
 
     def __call__(self, state):
-        print(str(state))
+        StateLogger.log_state(state, "ExecutorNode")
         try:
             task_state = TaskState.model_validate(state)
         except ValidationError as e:
-            print("Invalid state in ExecutorNode:", e)
+            StateLogger.log_msg("Invalid state in ExecutorNode", "ExecutorNode")
             raise
 
-        workspace = self.config.workspace_path
-        entry_path = workspace / self.entry_file
+        # Vind de laatste gegenereerde code
+        code_msg = next(
+            (m.content for m in reversed(task_state.messages)
+             if m.role in ("programmer", "reviser") and "```python" in m.content),
+            None
+        )
 
-        if not entry_path.exists():
-            task_state.error = f"Cannot find {self.entry_file} in {workspace}"
+        if not code_msg:
+            task_state.error = "No code block found in messages."
             return task_state.model_dump()
+
+        # Extract code from markdown block
+        match = re.search(r"```python\\n(.*?)```", code_msg, re.DOTALL)
+        if not match:
+            task_state.error = "Could not extract code from code block."
+            return task_state.model_dump()
+
+        code = match.group(1).strip()
+
+        # Schrijf naar tijdelijk bestand in workspace
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", dir=self.config.workspace_path, delete=False) as tmp:
+            tmp.write(code)
+            tmp_path = tmp.name
 
         try:
             result = subprocess.run(
-                [sys.executable, str(entry_path)],
+                [sys.executable, tmp_path],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 timeout=60,
-                text=True,
-                cwd=str(workspace)
+                text=True
             )
             output = result.stdout.strip()
             error_output = result.stderr.strip()
@@ -42,11 +62,11 @@ class ExecutorNode:
             )
             task_state.error = None if success else error_output
 
-            return task_state.model_dump()
-
         except subprocess.TimeoutExpired as e:
-            error_msg = f"Timeout while running {self.entry_file}: {str(e)}"
-            task_state.messages.append(Message(role="executor", content=error_msg))
-            task_state.error = error_msg
+            task_state.messages.append(Message(role="executor", content=f"Timeout: {str(e)}"))
+            task_state.error = str(e)
 
-            return task_state.model_dump()
+        finally:
+            Path(tmp_path).unlink(missing_ok=True)
+
+        return task_state.model_dump()

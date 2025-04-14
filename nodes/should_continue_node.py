@@ -1,12 +1,15 @@
 from nodes.TaskState import TaskState
 from pydantic import ValidationError
 
+from nodes.state_logger import StateLogger
+
+
 class ShouldContinueNode:
     def __init__(self, max_iterations=5):
         self.max_iterations = max_iterations
 
     def __call__(self, state):
-        print(str(state))
+        StateLogger.log_state(state, "ShouldContinueNode")
         try:
             task_state = TaskState.model_validate(state)
         except ValidationError as e:

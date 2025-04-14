@@ -4,6 +4,9 @@ from config import AppConfig
 from nodes.TaskState import TaskState, Message
 from pydantic import ValidationError
 
+from nodes.state_logger import StateLogger
+
+
 class CodeGeneratorNode:
     def __init__(self, config: AppConfig):
         self.config = config
@@ -14,8 +17,8 @@ class CodeGeneratorNode:
         self.model = config.llm_model
 
     def __call__(self, state):
+        StateLogger.log_state(state, "CodeGeneratorNode")
         try:
-            print(str(state))
             task_state = TaskState.model_validate(state)
         except ValidationError as e:
             print("Invalid state:", e)
