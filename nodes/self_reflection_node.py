@@ -16,7 +16,6 @@ class SelfReflectionNode:
         self.model = config.llm_model
 
     def __call__(self, state):
-        StateLogger.log_state(state, "SelfReflectionNode")
         try:
             task_state = TaskState.model_validate(state)
         except ValidationError as e:
@@ -55,5 +54,5 @@ class SelfReflectionNode:
         content = response.choices[0].message.content
         task_state.messages.append(Message(role="reviser", content=content))
         task_state.error = None
-
+        StateLogger.log_state(state, "SelfReflectionNode")
         return task_state.model_dump()

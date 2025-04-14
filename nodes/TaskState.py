@@ -9,7 +9,7 @@ class TaskState(BaseModel):
     messages: List[Message] = []
     file_structure: str = ""
     error: Optional[str] = None
-    should_continue: bool = False
+    should_continue: bool = True
 
     def log(self, title: str = "TaskState") -> None:
         print(f"\n===== {title} =====")

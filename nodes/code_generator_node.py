@@ -17,7 +17,6 @@ class CodeGeneratorNode:
         self.model = config.llm_model
 
     def __call__(self, state):
-        StateLogger.log_state(state, "CodeGeneratorNode")
         try:
             task_state = TaskState.model_validate(state)
         except ValidationError as e:
@@ -34,6 +33,8 @@ class CodeGeneratorNode:
 
         system_prompt = (
             "You are a programming assistant. Use the user's prompt and project structure below "
+            "You are not allowed to give additional instructions or any documentation."
+            "I prefer code that doesn't need an api key."
             "to generate code. Output a list of absolute file paths and their contents in the format:\n\n"
             "/absolute/path/to/file.py\n```python\n...code...\n```"
         )
@@ -45,6 +46,10 @@ class CodeGeneratorNode:
             {"role": "user", "content": prompt}
         ]
 
+        print("\n========== PROMPT TO LLM (CodeGeneratorNode) ==========")
+        print(prompt)
+        print("======================================================\n")
+
         response = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
@@ -52,6 +57,11 @@ class CodeGeneratorNode:
         )
 
         content = response.choices[0].message.content
+
+        print("========== RESPONSE FROM LLM (CodeGeneratorNode) ==========")
+        print(content)
+        print("===========================================================\n")
+
         self.parse_files_from_response(content, self.config.workspace_path)
 
         task_state.messages.append(Message(role="programmer", content=content))

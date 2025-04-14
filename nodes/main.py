@@ -28,7 +28,7 @@ class GraphBuilder:
         code_gen_node = CodeGeneratorNode(self.config)
         executor_node = ExecutorNode(self.config)
         reflection_node = SelfReflectionNode(self.config)
-        continue_node = ShouldContinueNode()
+        continue_node = ShouldContinueNode(self.config)
 
         builder = StateGraph(dict)
 
@@ -46,7 +46,7 @@ class GraphBuilder:
             "reflect": "reflect",
             "decide": "decide"
         })
-        builder.add_edge("reflect", "generate")
+        builder.add_edge("reflect", "decide")
         builder.add_conditional_edges("decide", should_continue, {
             "generate": "generate",
             "user": "user"
@@ -71,7 +71,8 @@ if __name__ == "__main__":
 
     # Use Pydantic state object and convert to dict
     initial_state = TaskState(
-        messages=[Message(role="user", content="I want a python script that gets the stock price of apples stock.")],
+        messages=[Message(role="user", content="You are here to generate code. Nothing more. No documentation. "
+                                               "No further instructions. Code that runs without an api key is preferred.")],
         file_structure="",
         error=None,
         should_continue=False
@@ -79,3 +80,5 @@ if __name__ == "__main__":
 
     graph = GraphBuilder(config).build_graph()
     graph.invoke(initial_state)
+
+#I want a python script that gets the stock price of apples stock
