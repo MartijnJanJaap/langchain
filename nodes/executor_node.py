@@ -42,17 +42,32 @@ class ExecutorNode:
                     tmp.write(code)
                     tmp_path = tmp.name
 
-                try:
-                    result = subprocess.run(
+                def run_script():
+                    return subprocess.run(
                         [sys.executable, tmp_path],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         timeout=60,
                         text=True
                     )
+
+                try:
+                    result = run_script()
                     output = result.stdout.strip()
                     error_output = result.stderr.strip()
                     success = result.returncode == 0 and not error_output
+
+                    # Handle missing package errors
+                    if not success:
+                        missing_pkg_match = re.search(r"No module named '(.*?)'", error_output)
+                        if missing_pkg_match:
+                            missing_package = missing_pkg_match.group(1)
+                            print(f"[ExecutorNode] Missing package '{missing_package}' detected. Installing...")
+                            subprocess.run([sys.executable, "-m", "pip", "install", missing_package])
+                            result = run_script()
+                            output = result.stdout.strip()
+                            error_output = result.stderr.strip()
+                            success = result.returncode == 0 and not error_output
 
                     visible_output = output if success else error_output
 

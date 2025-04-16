@@ -21,6 +21,10 @@ class UserProxyNode:
             raise
 
         prompt_text = self.get_user_input()
+        if prompt_text.strip().lower() == "exit":
+            print("\n[UserProxyNode] Exit command received. Shutting down gracefully.")
+            exit(0)
+
         self.config.prompts_dir.mkdir(parents=True, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -35,5 +39,5 @@ class UserProxyNode:
         return task_state.model_dump()
 
     def get_user_input(self):
-        print("Enter your prompt:")
+        print("User input required. 'exit' to stop the script. Enter your prompt:")
         return input().strip()

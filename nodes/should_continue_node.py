@@ -39,8 +39,9 @@ class ShouldContinueNode:
 
             prompt = (
                 "You are a smart decision-making agent.\n"
-                "Based on the user's original request and the final code output, determine if the task was completed successfully.\n"
-                "Reply only with one of the following: SUCCESS, FAILURE, or NOT_SURE.\n\n"
+                "Based on the user's original request and the final code output, determine if the task was completed successfully. The goal is more important then the code.\n"
+                "Reply only with one of the following: SUCCESS, FAILURE, or NOT_SURE."
+                "in newline give detailed reason why you chose that. \n\n"
                 f"User request:\n{user_input}\n\nCode output:\n{last_executor_output}\n"
             )
 
@@ -63,9 +64,9 @@ class ShouldContinueNode:
             print(f"LLM Decision: {decision}")
             print("===============================================\n")
 
-            if decision == "SUCCESS":
+            if "SUCCESS" in decision:
                 task_state.should_continue = False
-            elif decision == "FAILURE":
+            elif "FAILURE" in decision:
                 task_state.should_continue = True
             else:
                 task_state.should_continue = False

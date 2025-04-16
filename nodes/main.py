@@ -81,4 +81,4 @@ if __name__ == "__main__":
     graph = GraphBuilder(config).build_graph()
     graph.invoke(initial_state)
 
-#I want a python script that gets the stock price of apples stock
+#I want a python script that gets the stock price of apples stock. one tip, you could use yfinance.
