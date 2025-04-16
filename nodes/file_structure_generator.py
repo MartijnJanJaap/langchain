@@ -1,7 +1,7 @@
 # filename: file_structure_generator.py
 import os
 
-from prompt_generator.workspace.file_filter import FileFilter
+from file_filter import FileFilter
 
 
 class FileStructureGenerator:

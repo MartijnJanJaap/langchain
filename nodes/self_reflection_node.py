@@ -1,9 +1,9 @@
 import openai
 from config import AppConfig
-from nodes.TaskState import TaskState, Message
+from TaskState import TaskState, Message
 from pydantic import ValidationError
 
-from nodes.state_logger import StateLogger
+from state_logger import StateLogger
 
 
 class SelfReflectionNode:

@@ -1,10 +1,10 @@
 from datetime import datetime
 from pydantic import ValidationError
 
-from nodes.TaskState import TaskState, Message
-from nodes.file_structure_generator import FileStructureGenerator
+from TaskState import TaskState, Message
+from file_structure_generator import FileStructureGenerator
 from config import AppConfig
-from nodes.state_logger import StateLogger
+from state_logger import StateLogger
 
 
 class UserProxyNode:

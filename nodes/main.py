@@ -2,12 +2,12 @@ from pathlib import Path
 from langgraph.graph import StateGraph, END
 import json
 
-from nodes.TaskState import TaskState, Message
-from nodes.user_proxy_node import UserProxyNode
-from nodes.code_generator_node import CodeGeneratorNode
-from nodes.executor_node import ExecutorNode
-from nodes.self_reflection_node import SelfReflectionNode
-from nodes.should_continue_node import ShouldContinueNode
+from TaskState import TaskState, Message
+from user_proxy_node import UserProxyNode
+from code_generator_node import CodeGeneratorNode
+from executor_node import ExecutorNode
+from self_reflection_node import SelfReflectionNode
+from should_continue_node import ShouldContinueNode
 
 from config import AppConfig
 
@@ -18,6 +18,16 @@ def should_reflect(state):
 def should_continue(state):
     return "generate" if state.get("should_continue", False) else "user"
 
+def run(config: AppConfig):
+    initial_state = TaskState(
+        messages=[Message(role="user", content="")],
+        file_structure="",
+        error=None,
+        should_continue=False
+    ).model_dump()
+
+    graph = GraphBuilder(config).build_graph()
+    graph.invoke(initial_state)
 
 class GraphBuilder:
     def __init__(self, config: AppConfig):
@@ -69,14 +79,5 @@ if __name__ == "__main__":
         llm_base_url=llm_config_file[0].get("base_url")
     )
 
-    # Use Pydantic state object and convert to dict
-    initial_state = TaskState(
-        messages=[Message(role="user", content="")],
-        file_structure="",
-        error=None,
-        should_continue=False
-    ).model_dump()
-
-    graph = GraphBuilder(config).build_graph()
-    graph.invoke(initial_state)
+    run(config)
 

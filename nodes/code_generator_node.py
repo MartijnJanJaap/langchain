@@ -1,11 +1,10 @@
 import openai
 from pathlib import Path
 from config import AppConfig
-from nodes.TaskState import TaskState, Message
+from TaskState import TaskState, Message
 from pydantic import ValidationError
 
-from nodes.state_logger import StateLogger
-
+from state_logger import StateLogger
 
 class CodeGeneratorNode:
     def __init__(self, config: AppConfig):
@@ -23,32 +22,27 @@ class CodeGeneratorNode:
             print("Invalid state:", e)
             raise
 
-        last_user_message = next(
-            (m.content for m in reversed(task_state.messages) if m.role == "user"), ""
-        )
-        if not last_user_message:
-            raise ValueError("No user message found in state.")
-
         file_structure = task_state.file_structure
 
         system_prompt = (
             "You are a programming assistant. Use the user's prompt and project structure below "
-            "You are not allowed to give additional instructions or any documentation."
-            "I prefer code that doesn't need an api key."
-            "to generate code. Output a list of absolute file paths and their contents in the format:\n\n"
+            "You are not allowed to give additional instructions or any documentation. "
+            "I prefer code that doesn't need an API key. "
+            "Output a list of absolute file paths and their contents in the format:\n\n"
             "/absolute/path/to/file.py\n```python\n...code...\n```"
         )
 
-        prompt = f"User prompt:\n{last_user_message}\n\nProject structure:\n{file_structure}\n"
+        # Voeg alle messages toe, inclusief de file_structure als aparte user message
+        messages = [{"role": "system", "content": system_prompt}]
+        messages.extend(self.sanitize_messages_for_openai(task_state.messages))
 
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt}
-        ]
+        if file_structure:
+            messages.append({"role": "user", "content": f"Current project structure:\n{file_structure}"})
 
         print("\n========== PROMPT TO LLM (CodeGeneratorNode) ==========")
-        print(prompt)
-        print("======================================================\n")
+        for m in messages:
+            print(f"{m['role'].upper()}: {m['content']}\n")
+        print("=======================================================\n")
 
         response = self.client.chat.completions.create(
             model=self.model,
@@ -95,3 +89,16 @@ class CodeGeneratorNode:
             full_path.write_text(content)
 
         return list(files.keys())
+
+    def sanitize_messages_for_openai(self, messages: list[Message]) -> list[dict]:
+        allowed_roles = {"user", "assistant", "system"}
+        sanitized = []
+
+        for m in messages:
+            role = m.role if m.role in allowed_roles else "assistant"
+            content = f"[{m.role.upper()}]\n{m.content}" if m.role not in allowed_roles else m.content
+            sanitized.append({"role": role, "content": content})
+
+        return sanitized
+
+
