@@ -71,8 +71,7 @@ if __name__ == "__main__":
 
     # Use Pydantic state object and convert to dict
     initial_state = TaskState(
-        messages=[Message(role="user", content="You are here to generate code. Nothing more. No documentation. "
-                                               "No further instructions. Code that runs without an api key is preferred.")],
+        messages=[Message(role="user", content="")],
         file_structure="",
         error=None,
         should_continue=False
@@ -81,4 +80,3 @@ if __name__ == "__main__":
     graph = GraphBuilder(config).build_graph()
     graph.invoke(initial_state)
 
-#I want a python script that gets the stock price of apples stock. one tip, you could use yfinance.
