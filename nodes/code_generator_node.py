@@ -30,6 +30,7 @@ class CodeGeneratorNode:
             "I prefer code that doesn't need an API key. "
             "Output a list of absolute file paths and their contents in the format:\n\n"
             "/absolute/path/to/file.py\n```python\n...code...\n```"
+            "At the end I want to see a short summary of maximum 50 characters. starting with: 'Summary:'"
         )
 
         # Voeg alle messages toe, inclusief de file_structure als aparte user message
@@ -38,6 +39,13 @@ class CodeGeneratorNode:
 
         if file_structure:
             messages.append({"role": "user", "content": f"Current project structure:\n{file_structure}"})
+
+        workspace_files = self.get_workspace_files_with_contents()
+        if workspace_files:
+            messages.append({
+                "role": "user",
+                "content": f"Here are the current file contents in the project:\n\n{workspace_files}"
+            })
 
         print("\n========== PROMPT TO LLM (CodeGeneratorNode) ==========")
         for m in messages:
@@ -70,6 +78,9 @@ class CodeGeneratorNode:
         files = {}
 
         for line in lines:
+            if line.startswith("Summary:"):
+                break
+
             if line.startswith("/"):
                 if current_path and buffer:
                     files[current_path] = "\n".join(buffer).strip("`\n")
@@ -96,9 +107,33 @@ class CodeGeneratorNode:
 
         for m in messages:
             role = m.role if m.role in allowed_roles else "assistant"
-            content = f"[{m.role.upper()}]\n{m.content}" if m.role not in allowed_roles else m.content
+
+            # Speciale handling voor programmer messages: pak alleen de tekst na "Summary:"
+            if m.role == "programmer" and "Summary:" in m.content:
+                summary_part = m.content.split("Summary:", 1)[1].strip()
+                content = summary_part
+            else:
+                content = (
+                    f"[{m.role.upper()}]\n{m.content}" if m.role not in allowed_roles else m.content
+                )
+
             sanitized.append({"role": role, "content": content})
 
         return sanitized
 
+    def get_workspace_files_with_contents(self) -> str:
+        file_contents = []
+
+        for file_path in self.config.workspace_path.rglob("*"):
+            if file_path.is_file() and "__pycache__" not in str(file_path):
+                try:
+                    content = file_path.read_text(encoding="utf-8")
+                    relative_path = file_path.relative_to(self.config.workspace_path)
+                    file_contents.append(
+                        f"/{relative_path}\n```python\n{content}\n```"
+                    )
+                except Exception as e:
+                    print(f"Skipping file {file_path}: {e}")
+
+        return "\n\n".join(file_contents)
 

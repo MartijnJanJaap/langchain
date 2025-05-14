@@ -47,7 +47,7 @@ class ExecutorNode:
                         [sys.executable, tmp_path],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
-                        timeout=60,
+                        timeout=360,
                         text=True
                     )
 

@@ -1,0 +1,1 @@
+I want to know what stock from the s&p500 dropped the most past month. and how much did it drop in percentage.

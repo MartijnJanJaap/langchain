@@ -1,0 +1,1 @@
+i want to prevent the existing fetching code to log any errors.

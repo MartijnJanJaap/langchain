@@ -20,7 +20,7 @@ def should_continue(state):
 
 def run(config: AppConfig):
     initial_state = TaskState(
-        messages=[Message(role="user", content="")],
+        messages=[],
         file_structure="",
         error=None,
         should_continue=False
@@ -37,7 +37,6 @@ class GraphBuilder:
         user_node = UserProxyNode(self.config)
         code_gen_node = CodeGeneratorNode(self.config)
         executor_node = ExecutorNode(self.config)
-        reflection_node = SelfReflectionNode(self.config)
         continue_node = ShouldContinueNode(self.config)
 
         builder = StateGraph(dict)
@@ -45,18 +44,14 @@ class GraphBuilder:
         builder.add_node("user", user_node)
         builder.add_node("generate", code_gen_node)
         builder.add_node("execute", executor_node)
-        builder.add_node("reflect", reflection_node)
         builder.add_node("decide", continue_node)
 
         builder.set_entry_point("user")
 
         builder.add_edge("user", "generate")
         builder.add_edge("generate", "execute")
-        builder.add_conditional_edges("execute", should_reflect, {
-            "reflect": "reflect",
-            "decide": "decide"
-        })
-        builder.add_edge("reflect", "decide")
+        builder.add_edge("execute", "decide")
+
         builder.add_conditional_edges("decide", should_continue, {
             "generate": "generate",
             "user": "user"
