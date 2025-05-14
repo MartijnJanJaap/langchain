@@ -55,3 +55,5 @@ htmlcov/
 *.pem
 *.key
 */OAI_CONFIG_LIST.json
+OAI_CONFIG_LIST.json
+workspace/OAI_CONFIG_LIST.json
